@@ -71,7 +71,7 @@ export const GameSummaryCard: FC<GameSummaryCardProps> = ({ game }) => {
         borderBottomRadius={'md'}
         bg={colorMode === 'light' ? 'gray.100' : 'gray.900'}
         border={'2px'}
-        borderColor={'gray.300'}
+        borderColor={colorMode === 'light' ? 'gray.300' : 'gray.700'}
         padding={2}
       >
         <HStack spacing={4}>
