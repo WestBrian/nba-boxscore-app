@@ -7,45 +7,50 @@ import useSWR from 'swr'
 import { nbaService } from '../services/nba.service'
 import { useRouter } from 'next/router'
 import { parse } from 'date-fns'
+import { customFetch } from '../utils/fetch'
+import isEmpty from 'lodash/isEmpty'
 
 // https://cdn.nba.com/headshots/nba/latest/1040x760/${player.personId}.png
 
-export interface BoxscoreProps {
-  boxscore: IBoxscore
-}
+export interface BoxscoreProps {}
 
-export const Boxscore: FC<BoxscoreProps> = ({ boxscore: initialBoxscore }) => {
+export const Boxscore: FC<BoxscoreProps> = () => {
   const router = useRouter()
-  const date = parse(router.query.date as string, 'yyyyMMdd', new Date())
-  const gameId = router.query.gameId as string
-  const { data: boxscore } = useSWR(
-    nbaService.getBoxscorePath(date, gameId),
-    () => nbaService.getBoxscore(date, gameId),
+  const { data } = useSWR<IBoxscore>(
+    () => {
+      const date = parse(router.query.date as string, 'yyyyMMdd', new Date())
+      const gameId = router.query.gameId as string
+      return nbaService.getBoxscorePath(date, gameId)
+    },
+    customFetch,
     {
-      fallback: initialBoxscore,
       refreshInterval: 30000
     }
   )
 
-  if (!boxscore) {
+  if (!data) {
     return null
   }
 
-  const hTeamBoxscore = boxscore.stats?.activePlayers.filter(
-    (player) => player.teamId === boxscore.basicGameData.hTeam.teamId
+  const hTeamBoxscore = data.stats?.activePlayers.filter(
+    (player) => player.teamId === data.basicGameData.hTeam.teamId
   )
-  const vTeamBoxscore = boxscore.stats?.activePlayers.filter(
-    (player) => player.teamId === boxscore.basicGameData.vTeam.teamId
+  const vTeamBoxscore = data.stats?.activePlayers.filter(
+    (player) => player.teamId === data.basicGameData.vTeam.teamId
   )
 
   return (
     <Container maxW={'container.xl'} paddingY={[8, 16]} centerContent>
       <VStack spacing={8}>
-        <BoxscoreScore boxscore={boxscore} />
-        <VStack spacing={4}>
-          <BoxscoreTable playerStats={hTeamBoxscore || []} />
-          <BoxscoreTable playerStats={vTeamBoxscore || []} />
-        </VStack>
+        <BoxscoreScore boxscore={data} />
+        <BoxscoreTable
+          teamName={data.basicGameData.hTeam.triCode}
+          playerStats={hTeamBoxscore || []}
+        />
+        <BoxscoreTable
+          teamName={data.basicGameData.vTeam.triCode}
+          playerStats={vTeamBoxscore || []}
+        />
       </VStack>
     </Container>
   )
