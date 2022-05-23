@@ -1,7 +1,6 @@
 import type { FC } from 'react'
 import {
   Box,
-  Table,
   Thead,
   Tbody,
   Tr,
@@ -13,6 +12,7 @@ import {
   useBreakpoint
 } from '@chakra-ui/react'
 import type { IBoxscore } from '../../types'
+import { AutoSizeTable } from '../AutoSizeTable'
 
 const mobileHeaders = ['name', 'reb', 'ast', 'pts']
 const headers = ['name', 'min', 'fg', '3pt', 'ft', 'reb', 'ast', 'pts', '+/-']
@@ -54,7 +54,7 @@ export const BoxscoreTable: FC<BoxscoreTableProps> = ({
         borderRadius={'md'}
         width={'full'}
       >
-        <Table size={'sm'} variant={'simple'}>
+        <AutoSizeTable size={'sm'} variant={'simple'}>
           <Thead>
             <Tr>
               {(breakpoint === 'base' ? mobileHeaders : headers).map(
@@ -73,31 +73,43 @@ export const BoxscoreTable: FC<BoxscoreTableProps> = ({
                 borderBottom={index === 4 ? '8px' : undefined}
                 borderColor={colorMode === 'light' ? 'gray.100' : 'gray.700'}
               >
-                <Td>{formatName(player.firstName, player.lastName)}</Td>
+                <Td width={142}>
+                  {formatName(player.firstName, player.lastName)}
+                </Td>
                 {breakpoint !== 'base' && (
                   <>
-                    <Td isNumeric>{formatMinutes(player.min)}</Td>
-                    <Td isNumeric>
+                    <Td whiteSpace={'nowrap'} isNumeric>
+                      {formatMinutes(player.min)}
+                    </Td>
+                    <Td whiteSpace={'nowrap'} isNumeric>
                       {player.fgm}-{player.fga}
                     </Td>
-                    <Td isNumeric>
+                    <Td whiteSpace={'nowrap'} isNumeric>
                       {player.tpm}-{player.tpa}
                     </Td>
-                    <Td isNumeric>
+                    <Td whiteSpace={'nowrap'} isNumeric>
                       {player.ftm}-{player.fta}
                     </Td>
                   </>
                 )}
-                <Td isNumeric>{player.totReb}</Td>
-                <Td isNumeric>{player.assists}</Td>
-                <Td isNumeric>{player.points}</Td>
+                <Td whiteSpace={'nowrap'} isNumeric>
+                  {player.totReb}
+                </Td>
+                <Td whiteSpace={'nowrap'} isNumeric>
+                  {player.assists}
+                </Td>
+                <Td whiteSpace={'nowrap'} isNumeric>
+                  {player.points}
+                </Td>
                 {breakpoint !== 'base' && (
-                  <Td isNumeric>{formatPlusMinus(player.plusMinus)}</Td>
+                  <Td whiteSpace={'nowrap'} isNumeric>
+                    {formatPlusMinus(player.plusMinus)}
+                  </Td>
                 )}
               </Tr>
             ))}
           </Tbody>
-        </Table>
+        </AutoSizeTable>
       </Box>
     </VStack>
   )

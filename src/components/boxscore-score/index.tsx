@@ -6,7 +6,7 @@ import { nbaService } from '../../services/nba.service'
 
 export interface ScoreSummaryProps {
   teamSummary: IBoxscore['basicGameData']['hTeam']
-  teamStats: NonNullable<IBoxscore['stats']>['hTeam']
+  teamStats?: NonNullable<IBoxscore['stats']>['hTeam']
   reverse?: boolean
 }
 
@@ -28,7 +28,7 @@ const ScoreSummary: FC<ScoreSummaryProps> = ({
         alt={teamSummary.triCode}
       />
       <Text fontSize={'2xl'} fontWeight={'semibold'}>
-        {teamStats.totals.points}
+        {teamStats?.totals.points || 0}
       </Text>
     </Stack>
   )
@@ -39,15 +39,24 @@ export interface BoxscoreScoreProps {
 }
 
 export const BoxscoreScore: FC<BoxscoreScoreProps> = ({ boxscore }) => {
+  function getClock() {
+    return boxscore.basicGameData.isGameActivated
+      ? `Q${boxscore.basicGameData.period.current} ${boxscore.basicGameData.clock}`
+      : boxscore.basicGameData.endTimeUTC
+      ? 'FINAL'
+      : boxscore.basicGameData.startTimeEastern
+  }
+
   return (
-    <HStack spacing={16}>
+    <HStack spacing={[8, 16]}>
       <ScoreSummary
         teamSummary={boxscore.basicGameData.hTeam}
-        teamStats={boxscore.stats!.hTeam}
+        teamStats={boxscore.stats?.hTeam}
       />
+      <Text>{getClock()}</Text>
       <ScoreSummary
         teamSummary={boxscore.basicGameData.vTeam}
-        teamStats={boxscore.stats!.vTeam}
+        teamStats={boxscore.stats?.vTeam}
         reverse
       />
     </HStack>
