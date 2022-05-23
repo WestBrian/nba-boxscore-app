@@ -1,6 +1,6 @@
-import type { FC } from 'react'
+import { type FC, useState, useRef } from 'react'
 import type { IBoxscore } from '../types'
-import { Container, VStack, Text } from '@chakra-ui/react'
+import { Container, VStack, useDimensions } from '@chakra-ui/react'
 import { BoxscoreTable } from '../components/boxscore-table'
 import { BoxscoreScore } from '../components/boxscore-score'
 import useSWR from 'swr'
@@ -8,9 +8,8 @@ import { nbaService } from '../services/nba.service'
 import { useRouter } from 'next/router'
 import { parse } from 'date-fns'
 import { customFetch } from '../utils/fetch'
-import isEmpty from 'lodash/isEmpty'
-
-// https://cdn.nba.com/headshots/nba/latest/1040x760/${player.personId}.png
+import { LeaderCards } from '../components/leader-cards'
+import { AutoSizeTableProvider } from '../components/AutoSizeTable'
 
 export interface BoxscoreProps {}
 
@@ -40,18 +39,21 @@ export const Boxscore: FC<BoxscoreProps> = () => {
   )
 
   return (
-    <Container maxW={'container.xl'} paddingY={[8, 16]} centerContent>
-      <VStack spacing={8}>
-        <BoxscoreScore boxscore={data} />
-        <BoxscoreTable
-          teamName={data.basicGameData.hTeam.triCode}
-          playerStats={hTeamBoxscore || []}
-        />
-        <BoxscoreTable
-          teamName={data.basicGameData.vTeam.triCode}
-          playerStats={vTeamBoxscore || []}
-        />
-      </VStack>
-    </Container>
+    <AutoSizeTableProvider>
+      <Container maxW={'container.xl'} paddingY={[8, 16]} centerContent>
+        <VStack spacing={8}>
+          <BoxscoreScore boxscore={data} />
+          <LeaderCards boxscore={data} />
+          <BoxscoreTable
+            teamName={data.basicGameData.hTeam.triCode}
+            playerStats={hTeamBoxscore || []}
+          />
+          <BoxscoreTable
+            teamName={data.basicGameData.vTeam.triCode}
+            playerStats={vTeamBoxscore || []}
+          />
+        </VStack>
+      </Container>
+    </AutoSizeTableProvider>
   )
 }
