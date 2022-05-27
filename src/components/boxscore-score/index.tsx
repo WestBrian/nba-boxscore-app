@@ -40,11 +40,20 @@ export interface BoxscoreScoreProps {
 
 export const BoxscoreScore: FC<BoxscoreScoreProps> = ({ boxscore }) => {
   function getClock() {
-    return boxscore.basicGameData.isGameActivated
-      ? `Q${boxscore.basicGameData.period.current} ${boxscore.basicGameData.clock}`
-      : boxscore.basicGameData.endTimeUTC
+    const data = boxscore.basicGameData
+    const isActive = data.isGameActivated
+    const isHalftime = data.period.isHalftime
+    const isFinished = !!data.endTimeUTC
+    const quarter = data.period.current
+    const time = data.clock
+
+    return isFinished
       ? 'FINAL'
-      : boxscore.basicGameData.startTimeEastern
+      : isHalftime
+      ? 'HALFTIME'
+      : isActive
+      ? `Q${quarter} ${time}`
+      : data.startTimeEastern
   }
 
   return (

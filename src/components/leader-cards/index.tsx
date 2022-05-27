@@ -1,15 +1,16 @@
 import type { FC } from 'react'
 import {
   Box,
-  HStack,
   Flex,
   Text,
   AspectRatio,
   useColorMode,
-  VStack
+  VStack,
+  SlideFade
 } from '@chakra-ui/react'
 import type { IBoxscore } from '../../types'
 import Image from 'next/image'
+import get from 'lodash/get'
 
 const categories = ['points', 'assists', 'rebounds'] as const
 
@@ -63,43 +64,38 @@ export const LeaderCards: FC<LeaderCardsProps> = ({ boxscore }) => {
     team: 'hTeam' | 'vTeam',
     category: typeof categories[number]
   ) {
-    const stats = boxscore.stats
-
-    if (!stats) {
-      return {
-        name: 'Player',
-        personId: '201939',
-        value: '0'
-      }
-    }
-
-    const teamLeaders = stats[team].leaders[category]
+    const leadersPath = `stats[${team}].leaders[${category}]`
 
     return {
-      name: teamLeaders.players[0].lastName,
-      personId: teamLeaders.players[0].personId,
-      value: teamLeaders.value
+      name: get(boxscore, `${leadersPath}.players[0].lastName`, 'Player'),
+      personId: get(boxscore, `${leadersPath}.players[0].personId`, '201939'),
+      value: get(boxscore, `${leadersPath}.value`, '0')
     }
   }
 
   return (
-    <Flex gap={4} direction={['column', 'row']} width={'full'}>
+    <Flex gap={8} direction={{ base: 'column', lg: 'row' }} width={'full'}>
       {categories.map((category) => (
-        <Box key={category} width={'full'}>
-          <VStack spacing={2} align={'flex-start'}>
-            <Text casing={'uppercase'} fontWeight={'semibold'}>
-              {category}
-            </Text>
-            <Flex
-              gap={2}
-              width={'full'}
-              justify={['space-between', 'flex-start']}
-            >
-              <Card {...getLeaderInfo(boxscore, 'hTeam', category)} />
-              <Card {...getLeaderInfo(boxscore, 'vTeam', category)} />
-            </Flex>
-          </VStack>
-        </Box>
+        <SlideFade key={category} in offsetY={35}>
+          <Box width={'full'}>
+            <VStack spacing={2} align={{ base: 'center', lg: 'flex-start' }}>
+              <Text casing={'uppercase'} fontWeight={'semibold'}>
+                {category}
+              </Text>
+              <Flex
+                gap={2}
+                width={'full'}
+                justify={{
+                  base: 'center',
+                  lg: 'flex-start'
+                }}
+              >
+                <Card {...getLeaderInfo(boxscore, 'hTeam', category)} />
+                <Card {...getLeaderInfo(boxscore, 'vTeam', category)} />
+              </Flex>
+            </VStack>
+          </Box>
+        </SlideFade>
       ))}
     </Flex>
   )
