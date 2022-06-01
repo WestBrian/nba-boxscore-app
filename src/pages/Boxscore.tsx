@@ -1,6 +1,6 @@
-import { type FC, useState, useRef } from 'react'
+import { type FC } from 'react'
 import type { IBoxscore } from '../types'
-import { Container, VStack, useDimensions } from '@chakra-ui/react'
+import { Container, VStack } from '@chakra-ui/react'
 import { BoxscoreTable } from '../components/boxscore-table'
 import { BoxscoreScore } from '../components/boxscore-score'
 import useSWR from 'swr'

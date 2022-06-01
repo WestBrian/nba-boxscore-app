@@ -1,23 +1,19 @@
 import { type FC, useState } from 'react'
-import { Container, VStack, Text } from '@chakra-ui/react'
+import { Container, VStack, Text, Skeleton } from '@chakra-ui/react'
 import type { IScoreboard } from '../types'
 import { DayPicker } from '../components/day-picker'
 import useSWR from 'swr'
 import { nbaService } from '../services/nba.service'
+import { customFetch } from '../utils/fetch'
 import { GameSummaryCard } from '../components/game-summary-card'
 
-export interface HomeProps {
-  scoreboard: IScoreboard
-}
+export interface HomeProps {}
 
-export const Home: FC<HomeProps> = ({ scoreboard: initialScoreboard }) => {
+export const Home: FC<HomeProps> = () => {
   const [selectedDate, setSelectedDate] = useState(new Date())
-  const { data } = useSWR(
+  const { data } = useSWR<IScoreboard>(
     nbaService.getScoreboardPath(selectedDate),
-    () => nbaService.getScoreboard(selectedDate),
-    {
-      fallbackData: initialScoreboard
-    }
+    customFetch
   )
 
   return (
@@ -28,6 +24,7 @@ export const Home: FC<HomeProps> = ({ scoreboard: initialScoreboard }) => {
           setSelectedDate={setSelectedDate}
         />
         <VStack spacing={[4, 8]} width={'full'}>
+          {!data && <Skeleton w={400} h={174} />}
           {data?.games.map((game) => (
             <GameSummaryCard key={game.gameId} game={game} />
           ))}
