@@ -1,8 +1,9 @@
-import { Stack, HStack, Text } from '@chakra-ui/react'
+import { Stack, HStack, VStack, Text, Box } from '@chakra-ui/react'
 import type { FC } from 'react'
 import type { IBoxscore } from '../../types'
 import Image from 'next/image'
 import { nbaService } from '../../services/nba.service'
+import get from 'lodash/get'
 
 export interface ScoreSummaryProps {
   teamSummary: IBoxscore['basicGameData']['hTeam']
@@ -39,6 +40,8 @@ export interface BoxscoreScoreProps {
 }
 
 export const BoxscoreScore: FC<BoxscoreScoreProps> = ({ boxscore }) => {
+  const seriesText = get(boxscore, 'basicGameData.playoffs.seriesSummaryText')
+
   function getClock() {
     const data = boxscore.basicGameData
     const isActive = data.isGameActivated
@@ -62,7 +65,11 @@ export const BoxscoreScore: FC<BoxscoreScoreProps> = ({ boxscore }) => {
         teamSummary={boxscore.basicGameData.hTeam}
         teamStats={boxscore.stats?.hTeam}
       />
-      <Text>{getClock()}</Text>
+      <VStack>
+        {seriesText && <Box h={18} />}
+        <Text>{getClock()}</Text>
+        {seriesText && <Text fontSize={12}>{seriesText}</Text>}
+      </VStack>
       <ScoreSummary
         teamSummary={boxscore.basicGameData.vTeam}
         teamStats={boxscore.stats?.vTeam}

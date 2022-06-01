@@ -18,13 +18,11 @@ class NBAService {
   }
 
   getScoreboardPath(date: Date) {
-    return `/${this.formatDate(date)}/scoreboard.json`
+    return this.getUrl(`/${this.formatDate(date)}/scoreboard.json`)
   }
 
   async getScoreboard(date: Date) {
-    return await customFetch<IScoreboard>(
-      this.getUrl(this.getScoreboardPath(date))
-    )
+    return await customFetch<IScoreboard>(this.getScoreboardPath(date))
   }
 
   getBoxscorePath(date: Date, gameId: string) {

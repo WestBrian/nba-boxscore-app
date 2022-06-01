@@ -8,6 +8,7 @@ import {
   createContext
 } from 'react'
 import { useDimensions, Table, type TableProps } from '@chakra-ui/react'
+import noop from 'lodash/noop'
 
 interface AutoSizeTableContextValue {
   width: number
@@ -16,7 +17,7 @@ interface AutoSizeTableContextValue {
 
 const AutoSizeTableContext = createContext<AutoSizeTableContextValue>({
   width: 0,
-  setWidth: () => {}
+  setWidth: noop
 })
 
 const useAutoSizeTableContext = () => useContext(AutoSizeTableContext)
