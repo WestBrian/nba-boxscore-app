@@ -1,6 +1,6 @@
 import { type FC } from 'react'
 import type { IBoxscore } from '../types'
-import { Container, VStack } from '@chakra-ui/react'
+import { Container, VStack, Text } from '@chakra-ui/react'
 import { BoxscoreTable } from '../components/boxscore-table'
 import { BoxscoreScore } from '../components/boxscore-score'
 import useSWR from 'swr'
@@ -44,14 +44,20 @@ export const Boxscore: FC<BoxscoreProps> = () => {
         <VStack spacing={8}>
           <BoxscoreScore boxscore={data} />
           <LeaderCards boxscore={data} />
-          <BoxscoreTable
-            teamName={data.basicGameData.hTeam.triCode}
-            playerStats={hTeamBoxscore || []}
-          />
-          <BoxscoreTable
-            teamName={data.basicGameData.vTeam.triCode}
-            playerStats={vTeamBoxscore || []}
-          />
+          {hTeamBoxscore && vTeamBoxscore ? (
+            <>
+              <BoxscoreTable
+                teamName={data.basicGameData.hTeam.triCode}
+                playerStats={hTeamBoxscore || []}
+              />
+              <BoxscoreTable
+                teamName={data.basicGameData.vTeam.triCode}
+                playerStats={vTeamBoxscore || []}
+              />
+            </>
+          ) : (
+            <Text>The boxscore will be available when the game starts</Text>
+          )}
         </VStack>
       </Container>
     </AutoSizeTableProvider>
