@@ -13,9 +13,86 @@ import {
 } from '@chakra-ui/react'
 import type { IBoxscore } from '../../types'
 import { AutoSizeTable } from '../AutoSizeTable'
+import { percentage } from '../../utils/percentage'
 
+type StatKey = keyof NonNullable<IBoxscore['stats']>['activePlayers'][number]
+
+const nameWidth = 142 as const
 const mobileHeaders = ['name', 'reb', 'ast', 'pts']
 const headers = ['name', 'min', 'fg', '3pt', 'ft', 'reb', 'ast', 'pts', '+/-']
+
+interface TotalsRowProps {
+  playerStats: NonNullable<IBoxscore['stats']>['activePlayers']
+}
+
+const TotalsRow: FC<TotalsRowProps> = ({ playerStats }) => {
+  const breakpoint = useBreakpoint('md')
+
+  function getTotal(key: StatKey) {
+    return playerStats.reduce((prev, curr) => prev + Number(curr[key]), 0)
+  }
+
+  const totalFgm = getTotal('fgm')
+  const totalFga = getTotal('fga')
+  const totalTpm = getTotal('tpm')
+  const totalTpa = getTotal('tpa')
+  const totalFtm = getTotal('ftm')
+  const totalFta = getTotal('fta')
+  const totalReb = getTotal('totReb')
+  const totalAst = getTotal('assists')
+  const totalPts = getTotal('points')
+
+  return (
+    <>
+      <Tr>
+        <Td width={nameWidth} />
+        {breakpoint !== 'base' && (
+          <>
+            <Td />
+            <Td whiteSpace={'nowrap'} isNumeric>
+              {totalFgm}-{totalFga}
+            </Td>
+            <Td whiteSpace={'nowrap'} isNumeric>
+              {totalTpm}-{totalTpa}
+            </Td>
+            <Td whiteSpace={'nowrap'} isNumeric>
+              {totalFtm}-{totalFta}
+            </Td>
+          </>
+        )}
+        <Td whiteSpace={'nowrap'} isNumeric>
+          {totalReb}
+        </Td>
+        <Td whiteSpace={'nowrap'} isNumeric>
+          {totalAst}
+        </Td>
+        <Td whiteSpace={'nowrap'} isNumeric>
+          {totalPts}
+        </Td>
+        {breakpoint !== 'base' && <Td />}
+      </Tr>
+      {breakpoint !== 'base' && (
+        <Tr>
+          <Td width={nameWidth} />
+          <Td />
+          <Td whiteSpace={'nowrap'} isNumeric>
+            {percentage(totalFgm, totalFga)}%
+          </Td>
+          <Td whiteSpace={'nowrap'} isNumeric>
+            {percentage(totalTpm, totalTpa)}%
+          </Td>
+          <Td whiteSpace={'nowrap'} isNumeric>
+            {percentage(totalFtm, totalFta)}%
+          </Td>
+          <Td />
+          <Td />
+          <Td />
+          <Td />
+        </Tr>
+      )}
+    </>
+  )
+}
 
 export interface BoxscoreTableProps {
   teamName: string
@@ -73,7 +150,7 @@ export const BoxscoreTable: FC<BoxscoreTableProps> = ({
                 borderBottom={index === 4 ? '8px' : undefined}
                 borderColor={colorMode === 'light' ? 'gray.100' : 'gray.700'}
               >
-                <Td width={142}>
+                <Td width={nameWidth}>
                   {formatName(player.firstName, player.lastName)}
                 </Td>
                 {breakpoint !== 'base' && (
@@ -108,6 +185,7 @@ export const BoxscoreTable: FC<BoxscoreTableProps> = ({
                 )}
               </Tr>
             ))}
+            <TotalsRow playerStats={playerStats} />
           </Tbody>
         </AutoSizeTable>
       </Box>

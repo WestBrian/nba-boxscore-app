@@ -6,10 +6,11 @@ import {
   AspectRatio,
   useColorMode,
   VStack,
-  SlideFade
+  SlideFade,
+  useBreakpoint
 } from '@chakra-ui/react'
 import type { IBoxscore } from '../../types'
-import Image from 'next/image'
+import Image, { type ImageProps } from 'next/image'
 import get from 'lodash/get'
 
 const categories = ['points', 'assists', 'rebounds'] as const
@@ -18,9 +19,10 @@ interface CardProps {
   name: string
   personId: string
   value: string
+  priority?: ImageProps['priority']
 }
 
-const Card: FC<CardProps> = ({ name, personId, value }) => {
+const Card: FC<CardProps> = ({ name, personId, value, priority = false }) => {
   const { colorMode } = useColorMode()
 
   return (
@@ -47,6 +49,7 @@ const Card: FC<CardProps> = ({ name, personId, value }) => {
             alt={name}
             objectFit={'cover'}
             style={name === 'Player' ? { filter: 'brightness(0%)' } : undefined}
+            priority={priority}
           />
         </AspectRatio>
       </Flex>
@@ -59,6 +62,8 @@ export interface LeaderCardsProps {
 }
 
 export const LeaderCards: FC<LeaderCardsProps> = ({ boxscore }) => {
+  const breakpoint = useBreakpoint()
+
   function getLeaderInfo(
     boxscore: IBoxscore,
     team: 'hTeam' | 'vTeam',
@@ -71,6 +76,21 @@ export const LeaderCards: FC<LeaderCardsProps> = ({ boxscore }) => {
       personId: get(boxscore, `${leadersPath}.players[0].personId`, '201939'),
       value: get(boxscore, `${leadersPath}.value`, '0')
     }
+  }
+
+  function getPriority(
+    category: typeof categories[number],
+    breakpoint: string
+  ) {
+    if (breakpoint === 'base') {
+      if (category === 'points') {
+        return true
+      } else {
+        return false
+      }
+    }
+
+    return true
   }
 
   return (
@@ -90,8 +110,14 @@ export const LeaderCards: FC<LeaderCardsProps> = ({ boxscore }) => {
                   lg: 'flex-start'
                 }}
               >
-                <Card {...getLeaderInfo(boxscore, 'hTeam', category)} />
-                <Card {...getLeaderInfo(boxscore, 'vTeam', category)} />
+                <Card
+                  {...getLeaderInfo(boxscore, 'hTeam', category)}
+                  priority={getPriority(category, breakpoint)}
+                />
+                <Card
+                  {...getLeaderInfo(boxscore, 'vTeam', category)}
+                  priority={getPriority(category, breakpoint)}
+                />
               </Flex>
             </VStack>
           </Box>
