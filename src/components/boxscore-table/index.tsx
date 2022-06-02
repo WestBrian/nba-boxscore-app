@@ -12,7 +12,7 @@ import {
   useBreakpoint
 } from '@chakra-ui/react'
 import type { IBoxscore } from '../../types'
-import { AutoSizeTable } from '../AutoSizeTable'
+import { AutoSizeTable } from '../auto-size-table'
 import { percentage } from '../../utils/percentage'
 
 type StatKey = keyof NonNullable<IBoxscore['stats']>['activePlayers'][number]

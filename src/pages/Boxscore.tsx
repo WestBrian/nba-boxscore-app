@@ -9,7 +9,7 @@ import { useRouter } from 'next/router'
 import { parse } from 'date-fns'
 import { customFetch } from '../utils/fetch'
 import { LeaderCards } from '../components/leader-cards'
-import { AutoSizeTableProvider } from '../components/AutoSizeTable'
+import { AutoSizeTableProvider } from '../components/auto-size-table'
 
 export interface BoxscoreProps {}
 
