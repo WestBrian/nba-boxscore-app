@@ -23,10 +23,10 @@ export const DayPicker: FC<DayPickerProps> = ({
   selectedDate,
   setSelectedDate
 }) => {
-  const [middleDate, setMiddleDate] = useState(new Date())
+  const [middleDate, setMiddleDate] = useState(selectedDate)
 
   // TODO: Find a fix for this
-  const range = useBreakpointValue({ base: 1, md: 3 }, 'md')
+  const range = useBreakpointValue({ base: 1, md: 3 }, 'md') || 3
 
   const interval = useMemo(() => {
     if (!range) {
@@ -39,15 +39,15 @@ export const DayPicker: FC<DayPickerProps> = ({
     })
   }, [middleDate, range])
 
+  const totalDatesShown = 1 + range * 2
+
   return (
-    <HStack spacing={4}>
+    <HStack spacing={[2, 4]}>
       <IconButton
         icon={<ChevronLeftIcon />}
         size={'sm'}
-        aria-label={`Previous ${range} days`}
-        onClick={() =>
-          setMiddleDate(subDays(middleDate, range ? range + 4 : 5))
-        }
+        aria-label={`Previous ${totalDatesShown} days`}
+        onClick={() => setMiddleDate(subDays(middleDate, totalDatesShown))}
       />
       {interval.map((date) => (
         <Button
@@ -61,10 +61,8 @@ export const DayPicker: FC<DayPickerProps> = ({
       <IconButton
         icon={<ChevronRightIcon />}
         size={'sm'}
-        aria-label={`Next ${range} days`}
-        onClick={() =>
-          setMiddleDate(addDays(middleDate, range ? range + 4 : 5))
-        }
+        aria-label={`Next ${totalDatesShown} days`}
+        onClick={() => setMiddleDate(addDays(middleDate, totalDatesShown))}
       />
     </HStack>
   )
