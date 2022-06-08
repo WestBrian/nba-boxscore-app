@@ -17,14 +17,14 @@ export const Home: FC<HomeProps> = () => {
   )
 
   return (
-    <Container padding={[8, 16]} centerContent>
+    <Container paddingX={[4, 8, 16]} paddingY={[8, 16]} centerContent>
       <VStack spacing={[8, 16]} width={'full'}>
         <DayPicker
           selectedDate={selectedDate}
           setSelectedDate={setSelectedDate}
         />
         <VStack spacing={[4, 8]} width={'full'}>
-          {!data && <Skeleton w={400} h={174} />}
+          {!data && <Skeleton w={[311, 400]} h={174} />}
           {data?.games.map((game) => (
             <GameSummaryCard key={game.gameId} game={game} />
           ))}
