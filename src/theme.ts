@@ -8,8 +8,8 @@ const config: ThemeConfig = {
 const theme = extendTheme({
   config,
   fonts: {
-    body: 'Montserrat, sans-serif',
-    heading: 'Montserrat, sans-serif'
+    body: "'Roboto', sans-serif",
+    heading: "'Roboto', sans-serif"
   }
 })
 
