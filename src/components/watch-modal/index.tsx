@@ -92,7 +92,9 @@ export const WatchModal: FC<WatchModalProps> = ({
                   </HStack>
                 </Button>
               ) : (
-                <Text>{broadcast.shortName}</Text>
+                <Text key={`${gameId}-${broadcast.shortName}`}>
+                  {broadcast.shortName}
+                </Text>
               )
             })}
           </VStack>

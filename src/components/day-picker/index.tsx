@@ -1,18 +1,9 @@
-import { type FC, useState, useMemo } from 'react'
-import {
-  Button,
-  HStack,
-  IconButton,
-  useBreakpointValue
-} from '@chakra-ui/react'
-import {
-  eachDayOfInterval,
-  addDays,
-  subDays,
-  format,
-  isSameDay
-} from 'date-fns'
-import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'
+import type { FC } from 'react'
+import { HStack, VStack, IconButton, Button, Text } from '@chakra-ui/react'
+import { CalendarIcon } from '@chakra-ui/icons'
+import { eachDayOfInterval, addDays, format, isSameDay } from 'date-fns'
+import { useAtom } from 'jotai'
+import { initialDateAtom } from '../../store'
 
 export interface DayPickerProps {
   selectedDate: Date
@@ -23,47 +14,61 @@ export const DayPicker: FC<DayPickerProps> = ({
   selectedDate,
   setSelectedDate
 }) => {
-  const [middleDate, setMiddleDate] = useState(selectedDate)
+  const [initialDate] = useAtom(initialDateAtom)
 
-  // TODO: Find a fix for this
-  const range = useBreakpointValue({ base: 1, md: 3 }, 'md') || 3
-
-  const interval = useMemo(() => {
-    if (!range) {
-      return []
-    }
-    const today = middleDate
-    return eachDayOfInterval({
-      start: subDays(today, range),
-      end: addDays(today, range)
-    })
-  }, [middleDate, range])
-
-  const totalDatesShown = 1 + range * 2
+  const dates = eachDayOfInterval({
+    start: initialDate,
+    end: addDays(initialDate, 27)
+  })
 
   return (
-    <HStack spacing={[2, 4]}>
+    <HStack
+      w={'full'}
+      spacing={8}
+      p={4}
+      borderBottom={'1px'}
+      borderColor={'gray.900'}
+    >
       <IconButton
-        icon={<ChevronLeftIcon />}
-        size={'sm'}
-        aria-label={`Previous ${totalDatesShown} days`}
-        onClick={() => setMiddleDate(subDays(middleDate, totalDatesShown))}
+        size={'lg'}
+        icon={<CalendarIcon />}
+        aria-label={'Open calendar'}
       />
-      {interval.map((date) => (
-        <Button
-          key={date.toUTCString()}
-          disabled={isSameDay(selectedDate, date)}
-          onClick={() => setSelectedDate(date)}
-        >
-          {format(date, 'MM/dd')}
-        </Button>
-      ))}
-      <IconButton
-        icon={<ChevronRightIcon />}
-        size={'sm'}
-        aria-label={`Next ${totalDatesShown} days`}
-        onClick={() => setMiddleDate(addDays(middleDate, totalDatesShown))}
-      />
+      <HStack
+        w={'full'}
+        spacing={4}
+        overflowX={'scroll'}
+        sx={{
+          '::-webkit-scrollbar': {
+            display: 'none'
+          }
+        }}
+      >
+        {dates.map((date) => (
+          <Button
+            key={format(date, 'MM/dd')}
+            variant={isSameDay(selectedDate, date) ? 'solid' : 'ghost'}
+            boxShadow={isSameDay(selectedDate, date) ? 'lg' : undefined}
+            px={3}
+            py={8}
+            minW={'fit-content'}
+            onClick={() => setSelectedDate(date)}
+          >
+            <VStack spacing={1}>
+              <Text
+                fontSize={'sm'}
+                fontWeight={'bolder'}
+                letterSpacing={'widest'}
+              >
+                {format(date, 'E').toUpperCase()}
+              </Text>
+              <Text fontSize={'sm'} fontWeight={'normal'} color={'GrayText'}>
+                {format(date, 'MM/dd')}
+              </Text>
+            </VStack>
+          </Button>
+        ))}
+      </HStack>
     </HStack>
   )
 }
