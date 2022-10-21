@@ -6,7 +6,7 @@ const BoxscorePage: NextPage<BoxscoreProps> = ({ data }) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const url = `https://cdn.nba.com/static/json/liveData/boxscore/boxscore_${ctx.params.gameId}.json`
+  const url = `https://cdn.nba.com/static/json/liveData/boxscore/boxscore_${ctx.params?.gameId}.json`
   const response = await fetch(url)
   const data = await response.json()
 
