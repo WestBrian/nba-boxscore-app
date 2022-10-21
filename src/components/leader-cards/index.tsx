@@ -9,11 +9,10 @@ import {
   SlideFade,
   useBreakpoint
 } from '@chakra-ui/react'
-import type { IBoxscore } from '../../types'
 import Image, { type ImageProps } from 'next/image'
-import get from 'lodash/get'
+import type { BoxscoreResponse } from '../../services/boxscore.types'
 
-const categories = ['points', 'assists', 'rebounds'] as const
+const categories = ['points', 'assists', 'reboundsTotal'] as const
 
 interface CardProps {
   name: string
@@ -33,14 +32,14 @@ const Card: FC<CardProps> = ({ name, personId, value, priority = false }) => {
       paddingX={4}
       bg={colorMode === 'light' ? 'gray.300' : 'gray.900'}
       width={160}
-      height={205}
+      height={225}
     >
       <Flex direction={'column'} justify={'space-between'} height={'full'}>
         <VStack spacing={2}>
-          <Text fontWeight={'semibold'}>{name}</Text>
           <Text fontWeight={'semibold'} fontSize={'3xl'}>
             {value}
           </Text>
+          <Text fontWeight={'semibold'}>{name}</Text>
         </VStack>
         <AspectRatio ratio={1040 / 760}>
           <Image
@@ -58,23 +57,35 @@ const Card: FC<CardProps> = ({ name, personId, value, priority = false }) => {
 }
 
 export interface LeaderCardsProps {
-  boxscore: IBoxscore
+  boxscore: BoxscoreResponse['game']
 }
 
 export const LeaderCards: FC<LeaderCardsProps> = ({ boxscore }) => {
   const breakpoint = useBreakpoint()
 
   function getLeaderInfo(
-    boxscore: IBoxscore,
-    team: 'hTeam' | 'vTeam',
+    boxscore: BoxscoreResponse['game'],
+    team: 'homeTeam' | 'awayTeam',
     category: typeof categories[number]
   ) {
-    const leadersPath = `stats[${team}].leaders[${category}]`
+    const players = boxscore[team].players
+    const sorted = [...players].sort((a, b) => {
+      const aV = a.statistics[category]
+      const bV = b.statistics[category]
+      if (aV > bV) {
+        return -1
+      } else if (aV < bV) {
+        return 1
+      } else {
+        return 0
+      }
+    })
+    const leader = sorted[0]
 
     return {
-      name: get(boxscore, `${leadersPath}.players[0].lastName`, 'Player'),
-      personId: get(boxscore, `${leadersPath}.players[0].personId`, '201939'),
-      value: get(boxscore, `${leadersPath}.value`, '0')
+      name: leader.name,
+      personId: String(leader.personId),
+      value: String(leader.statistics[category])
     }
   }
 
@@ -98,12 +109,16 @@ export const LeaderCards: FC<LeaderCardsProps> = ({ boxscore }) => {
       {categories.map((category) => (
         <SlideFade key={category} in offsetY={35}>
           <Box width={'full'}>
-            <VStack spacing={2} align={{ base: 'center', lg: 'flex-start' }}>
+            <VStack
+              spacing={2}
+              align={{ base: 'center', lg: 'flex-start' }}
+              textAlign={'center'}
+            >
               <Text casing={'uppercase'} fontWeight={'semibold'}>
-                {category}
+                {category === 'reboundsTotal' ? 'Rebounds' : category}
               </Text>
               <Flex
-                gap={2}
+                gap={4}
                 width={'full'}
                 justify={{
                   base: 'center',
@@ -111,11 +126,11 @@ export const LeaderCards: FC<LeaderCardsProps> = ({ boxscore }) => {
                 }}
               >
                 <Card
-                  {...getLeaderInfo(boxscore, 'hTeam', category)}
+                  {...getLeaderInfo(boxscore, 'homeTeam', category)}
                   priority={getPriority(category, breakpoint)}
                 />
                 <Card
-                  {...getLeaderInfo(boxscore, 'vTeam', category)}
+                  {...getLeaderInfo(boxscore, 'awayTeam', category)}
                   priority={getPriority(category, breakpoint)}
                 />
               </Flex>

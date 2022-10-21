@@ -17,6 +17,7 @@ import TNTLogo from '../../../public/tnt.png'
 import ESPNLogo from '../../../public/espn.png'
 import Image, { StaticImageData } from 'next/image'
 import { ExternalLinkIcon } from '@chakra-ui/icons'
+import type { LeagueScheduleResponse } from '../../services/leagueSchedule.types'
 
 interface BroadcastMetaInfo {
   image: StaticImageData
@@ -49,7 +50,7 @@ const broadcasters: { [x: string]: BroadcastMetaInfo | undefined } = {
 interface WatchModalProps {
   gameId: string
   isOpen: boolean
-  broadcasts: IScoreboard['games'][number]['watch']['broadcast']['broadcasters']['national']
+  broadcasts: LeagueScheduleResponse['leagueSchedule']['gameDates'][number]['games'][number]['broadcasters']['nationalTvBroadcasters']
   onClose: () => void
 }
 
@@ -68,11 +69,12 @@ export const WatchModal: FC<WatchModalProps> = ({
         <ModalBody paddingBottom={4}>
           <VStack spacing={4}>
             {broadcasts.map((broadcast) => {
-              const info = broadcasters[broadcast.shortName.toLowerCase()]
+              const info =
+                broadcasters[broadcast.broadcasterAbbreviation.toLowerCase()]
 
               return info ? (
                 <Button
-                  key={`${gameId}-${broadcast.shortName}`}
+                  key={`${gameId}-${broadcast.broadcasterAbbreviation}`}
                   colorScheme={'purple'}
                   as={'a'}
                   href={info.watch}
@@ -84,16 +86,18 @@ export const WatchModal: FC<WatchModalProps> = ({
                         src={info.image}
                         width={info.width}
                         height={info.height}
-                        alt={broadcast.shortName}
+                        alt={broadcast.broadcasterAbbreviation}
                       />
-                      <Text fontWeight={'semibold'}>{broadcast.shortName}</Text>
+                      <Text fontWeight={'semibold'}>
+                        {broadcast.broadcasterAbbreviation}
+                      </Text>
                     </HStack>
                     <ExternalLinkIcon />
                   </HStack>
                 </Button>
               ) : (
-                <Text key={`${gameId}-${broadcast.shortName}`}>
-                  {broadcast.shortName}
+                <Text key={`${gameId}-${broadcast.broadcasterAbbreviation}`}>
+                  {broadcast.broadcasterAbbreviation}
                 </Text>
               )
             })}
