@@ -17,9 +17,15 @@ import Link from 'next/link'
 import { useBgColor } from '../../hooks/useBgColor'
 import { WatchModal } from '../watch-modal'
 import get from 'lodash/get'
+import type { LeagueScheduleResponse } from '../../services/leagueSchedule.types'
+import { format } from 'date-fns'
+
+type Game =
+  LeagueScheduleResponse['leagueSchedule']['gameDates'][number]['games'][number]
+type TeamInfo = Game['homeTeam']
 
 interface TeamDetailsProps {
-  team: IScoreboard['games'][number]['hTeam']
+  team: TeamInfo
   playoffs?: IScoreboard['games'][number]['playoffs']['hTeam']
   playoffLoss?: string
   reverse?: boolean
@@ -32,33 +38,44 @@ const TeamDetails: FC<TeamDetailsProps> = ({
   reverse = false
 }) => {
   const color = useColorModeValue('gray.600', 'gray.400')
-  const win = get(playoffs, 'seriesWin', team.win)
-  const loss = playoffLoss || team.loss
+  const win = get(playoffs, 'seriesWin', team.wins)
+  const loss = playoffLoss || team.losses
 
   return (
     <Stack
-      spacing={2}
+      spacing={6}
       direction={reverse ? 'row-reverse' : 'row'}
       align={'center'}
     >
-      <Image
-        src={nbaService.getLogoSrc(team.teamId)}
-        width={50}
-        height={50}
-        alt={team.triCode}
-      />
-      <VStack spacing={0} align={'flex-start'}>
-        <Text fontWeight={'semibold'}>{team.triCode}</Text>
-        <Text fontSize={12} color={color}>
-          ({win}-{loss})
+      <Stack
+        spacing={2}
+        direction={reverse ? 'row-reverse' : 'row'}
+        align={'center'}
+      >
+        <Image
+          src={nbaService.getLogoSrc(String(team.teamId))}
+          width={50}
+          height={50}
+          alt={team.teamTricode}
+        />
+        <VStack spacing={0} align={'flex-start'}>
+          <Text fontWeight={'semibold'}>{team.teamTricode}</Text>
+          <Text fontSize={12} color={color}>
+            ({win}-{loss})
+          </Text>
+        </VStack>
+      </Stack>
+      {team.score && (
+        <Text fontSize={'2xl'} fontWeight={'semibold'}>
+          {team.score}
         </Text>
-      </VStack>
+      )}
     </Stack>
   )
 }
 
 export interface GameSummaryCardProps {
-  game: IScoreboard['games'][number]
+  game: Game
 }
 
 export const GameSummaryCard: FC<GameSummaryCardProps> = ({ game }) => {
@@ -70,15 +87,15 @@ export const GameSummaryCard: FC<GameSummaryCardProps> = ({ game }) => {
     <>
       <Box width={['full', 400]} borderRadius={'md'} bg={bg}>
         <VStack spacing={4} padding={4}>
-          <Text align={'center'}>{game.startTimeEastern}</Text>
+          <Text>{game.gameStatusText.trim()}</Text>
           <Flex justifyContent={'space-between'} width={'full'}>
             <TeamDetails
-              team={game.hTeam}
+              team={game.homeTeam}
               playoffs={get(game, 'playoffs.hTeam')}
               playoffLoss={get(game, 'playoffs.vTeam.seriesWin')}
             />
             <TeamDetails
-              team={game.vTeam}
+              team={game.awayTeam}
               playoffs={get(game, 'playoffs.vTeam')}
               playoffLoss={get(game, 'playoffs.hTeam.seriesWin')}
               reverse
@@ -93,10 +110,7 @@ export const GameSummaryCard: FC<GameSummaryCardProps> = ({ game }) => {
           padding={2}
         >
           <HStack spacing={4}>
-            <Link
-              href={`/boxscore/${game.homeStartDate}/${game.gameId}`}
-              passHref
-            >
+            <Link href={`/boxscore/${game.gameId}`} passHref>
               <Button
                 as={'a'}
                 size={'sm'}
@@ -120,7 +134,7 @@ export const GameSummaryCard: FC<GameSummaryCardProps> = ({ game }) => {
       <WatchModal
         gameId={game.gameId}
         isOpen={isOpen}
-        broadcasts={game.watch.broadcast.broadcasters.national}
+        broadcasts={game.broadcasters.nationalTvBroadcasters}
         onClose={onClose}
       />
     </>

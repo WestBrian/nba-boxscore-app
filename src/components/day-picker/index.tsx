@@ -1,7 +1,13 @@
 import type { FC } from 'react'
 import { HStack, VStack, IconButton, Button, Text } from '@chakra-ui/react'
 import { CalendarIcon } from '@chakra-ui/icons'
-import { eachDayOfInterval, addDays, format, isSameDay } from 'date-fns'
+import {
+  eachDayOfInterval,
+  addDays,
+  format,
+  isSameDay,
+  subDays
+} from 'date-fns'
 import { useAtom } from 'jotai'
 import { initialDateAtom } from '../../store'
 
@@ -17,7 +23,7 @@ export const DayPicker: FC<DayPickerProps> = ({
   const [initialDate] = useAtom(initialDateAtom)
 
   const dates = eachDayOfInterval({
-    start: initialDate,
+    start: subDays(initialDate, 1),
     end: addDays(initialDate, 27)
   })
 
@@ -30,6 +36,7 @@ export const DayPicker: FC<DayPickerProps> = ({
       borderColor={'gray.900'}
     >
       <IconButton
+        variant={'ghost'}
         size={'lg'}
         icon={<CalendarIcon />}
         aria-label={'Open calendar'}

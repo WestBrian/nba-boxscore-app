@@ -11,36 +11,28 @@ import {
   useColorMode,
   useBreakpoint
 } from '@chakra-ui/react'
-import type { IBoxscore } from '../../types'
 import { AutoSizeTable } from '../auto-size-table'
-import { percentage } from '../../utils/percentage'
-
-type StatKey = keyof NonNullable<IBoxscore['stats']>['activePlayers'][number]
+import type { BoxscoreResponse } from '../../services/boxscore.types'
 
 const nameWidth = 142 as const
 const mobileHeaders = ['name', 'reb', 'ast', 'pts']
 const headers = ['name', 'min', 'fg', '3pt', 'ft', 'reb', 'ast', 'pts', '+/-']
 
 interface TotalsRowProps {
-  playerStats: NonNullable<IBoxscore['stats']>['activePlayers']
+  totals: BoxscoreResponse['game']['homeTeam']['statistics']
 }
 
-const TotalsRow: FC<TotalsRowProps> = ({ playerStats }) => {
+const TotalsRow: FC<TotalsRowProps> = ({ totals }) => {
   const breakpoint = useBreakpoint('md')
 
-  function getTotal(key: StatKey) {
-    return playerStats.reduce((prev, curr) => prev + Number(curr[key]), 0)
-  }
+  function formatPercentage(num: number) {
+    // return Math.round(num * 100) / 100
+    const formatter = Intl.NumberFormat('en-US', {
+      style: 'percent'
+    })
 
-  const totalFgm = getTotal('fgm')
-  const totalFga = getTotal('fga')
-  const totalTpm = getTotal('tpm')
-  const totalTpa = getTotal('tpa')
-  const totalFtm = getTotal('ftm')
-  const totalFta = getTotal('fta')
-  const totalReb = getTotal('totReb')
-  const totalAst = getTotal('assists')
-  const totalPts = getTotal('points')
+    return formatter.format(num)
+  }
 
   return (
     <>
@@ -50,24 +42,24 @@ const TotalsRow: FC<TotalsRowProps> = ({ playerStats }) => {
           <>
             <Td />
             <Td whiteSpace={'nowrap'} isNumeric>
-              {totalFgm}-{totalFga}
+              {totals.fieldGoalsMade}-{totals.fieldGoalsAttempted}
             </Td>
             <Td whiteSpace={'nowrap'} isNumeric>
-              {totalTpm}-{totalTpa}
+              {totals.threePointersMade}-{totals.threePointersAttempted}
             </Td>
             <Td whiteSpace={'nowrap'} isNumeric>
-              {totalFtm}-{totalFta}
+              {totals.freeThrowsMade}-{totals.freeThrowsAttempted}
             </Td>
           </>
         )}
         <Td whiteSpace={'nowrap'} isNumeric>
-          {totalReb}
+          {totals.reboundsTotal}
         </Td>
         <Td whiteSpace={'nowrap'} isNumeric>
-          {totalAst}
+          {totals.assists}
         </Td>
         <Td whiteSpace={'nowrap'} isNumeric>
-          {totalPts}
+          {totals.points}
         </Td>
         {breakpoint !== 'base' && <Td />}
       </Tr>
@@ -76,13 +68,13 @@ const TotalsRow: FC<TotalsRowProps> = ({ playerStats }) => {
           <Td width={nameWidth} />
           <Td />
           <Td whiteSpace={'nowrap'} isNumeric>
-            {percentage(totalFgm, totalFga)}%
+            {formatPercentage(totals.fieldGoalsPercentage)}
           </Td>
           <Td whiteSpace={'nowrap'} isNumeric>
-            {percentage(totalTpm, totalTpa)}%
+            {formatPercentage(totals.threePointersPercentage)}
           </Td>
           <Td whiteSpace={'nowrap'} isNumeric>
-            {percentage(totalFtm, totalFta)}%
+            {formatPercentage(totals.freeThrowsPercentage)}
           </Td>
           <Td />
           <Td />
@@ -95,14 +87,10 @@ const TotalsRow: FC<TotalsRowProps> = ({ playerStats }) => {
 }
 
 export interface BoxscoreTableProps {
-  teamName: string
-  playerStats: NonNullable<IBoxscore['stats']>['activePlayers']
+  stats: BoxscoreResponse['game']['homeTeam']
 }
 
-export const BoxscoreTable: FC<BoxscoreTableProps> = ({
-  teamName,
-  playerStats
-}) => {
+export const BoxscoreTable: FC<BoxscoreTableProps> = ({ stats }) => {
   const { colorMode } = useColorMode()
   const breakpoint = useBreakpoint('md')
 
@@ -111,8 +99,8 @@ export const BoxscoreTable: FC<BoxscoreTableProps> = ({
   }
 
   function formatMinutes(minutes: string) {
-    const arr = minutes.split(':')
-    return arr[0]
+    const match = minutes.match(/[0-9]+/)
+    return match ? (match[0] === '00' ? '—' : match[0]) : '—'
   }
 
   function formatPlusMinus(plusMinus: string) {
@@ -125,7 +113,7 @@ export const BoxscoreTable: FC<BoxscoreTableProps> = ({
 
   return (
     <VStack spacing={2} align={'flex-start'}>
-      <Text fontWeight={'semibold'}>{teamName}</Text>
+      <Text fontWeight={'semibold'}>{stats.teamName}</Text>
       <Box
         bg={colorMode === 'light' ? 'gray.300' : 'gray.900'}
         borderRadius={'md'}
@@ -144,48 +132,51 @@ export const BoxscoreTable: FC<BoxscoreTableProps> = ({
             </Tr>
           </Thead>
           <Tbody>
-            {playerStats.map((player, index) => (
+            {stats.players.map((player, index) => (
               <Tr
                 key={player.personId}
                 borderBottom={index === 4 ? '8px' : undefined}
                 borderColor={colorMode === 'light' ? 'gray.100' : 'gray.700'}
               >
                 <Td width={nameWidth}>
-                  {formatName(player.firstName, player.lastName)}
+                  {formatName(player.firstName, player.familyName)}
                 </Td>
                 {breakpoint !== 'base' && (
                   <>
                     <Td whiteSpace={'nowrap'} isNumeric>
-                      {formatMinutes(player.min)}
+                      {formatMinutes(player.statistics.minutesCalculated)}
                     </Td>
                     <Td whiteSpace={'nowrap'} isNumeric>
-                      {player.fgm}-{player.fga}
+                      {player.statistics.fieldGoalsMade}-
+                      {player.statistics.fieldGoalsAttempted}
                     </Td>
                     <Td whiteSpace={'nowrap'} isNumeric>
-                      {player.tpm}-{player.tpa}
+                      {player.statistics.threePointersMade}-
+                      {player.statistics.threePointersAttempted}
                     </Td>
                     <Td whiteSpace={'nowrap'} isNumeric>
-                      {player.ftm}-{player.fta}
+                      {player.statistics.freeThrowsMade}-
+                      {player.statistics.freeThrowsAttempted}
                     </Td>
                   </>
                 )}
                 <Td whiteSpace={'nowrap'} isNumeric>
-                  {player.totReb}
+                  {player.statistics.reboundsTotal}
                 </Td>
                 <Td whiteSpace={'nowrap'} isNumeric>
-                  {player.assists}
+                  {player.statistics.assists}
                 </Td>
                 <Td whiteSpace={'nowrap'} isNumeric>
-                  {player.points}
+                  {player.statistics.points}
                 </Td>
                 {breakpoint !== 'base' && (
                   <Td whiteSpace={'nowrap'} isNumeric>
-                    {formatPlusMinus(player.plusMinus)}
+                    {formatPlusMinus(String(player.statistics.plusMinusPoints))}
                   </Td>
                 )}
               </Tr>
             ))}
-            <TotalsRow playerStats={playerStats} />
+            <TotalsRow totals={stats.statistics} />
           </Tbody>
         </AutoSizeTable>
       </Box>
