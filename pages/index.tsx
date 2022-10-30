@@ -1,8 +1,8 @@
 import type { NextPage } from 'next'
-import { Home, HomeProps } from '../src/pages/Home'
+import { Schedule, ScheduleProps } from '../src/pages/Schedule'
 
-const HomePage: NextPage<HomeProps> = () => {
-  return <Home />
+const HomePage: NextPage<ScheduleProps> = () => {
+  return <Schedule />
 }
 
 export default HomePage

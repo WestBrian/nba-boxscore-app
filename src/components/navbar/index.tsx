@@ -41,11 +41,14 @@ export const Navbar: FC<NavbarProps> = () => {
                   colorMode === 'light' ? undefined : { filter: 'invert()' }
                 }
               />
-              <Text fontWeight={'semibold'}>BOXSCORE</Text>
+              <Text fontWeight={'semibold'} letterSpacing={'wider'}>
+                BOXSCORE
+              </Text>
             </HStack>
           </a>
         </Link>
         <IconButton
+          variant={'ghost'}
           icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
           aria-label={`Use ${colorMode} theme`}
           onClick={toggleColorMode}

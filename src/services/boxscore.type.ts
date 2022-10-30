@@ -100,6 +100,7 @@ export type BoxscoreResponse = {
         firstName: string
         familyName: string
         notPlayingReason?: string
+        notPlayingDescription?: string
       }>
       statistics: {
         assists: number
