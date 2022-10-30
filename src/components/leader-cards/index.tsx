@@ -10,7 +10,7 @@ import {
   useBreakpoint
 } from '@chakra-ui/react'
 import Image, { type ImageProps } from 'next/image'
-import type { BoxscoreResponse } from '../../services/boxscore.types'
+import type { BoxscoreResponse } from '../../services/boxscore.type'
 
 const categories = ['points', 'assists', 'reboundsTotal'] as const
 
