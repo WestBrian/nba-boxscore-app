@@ -1,5 +1,12 @@
 import { ArrowLeftIcon, CalendarIcon, ArrowRightIcon } from '@chakra-ui/icons'
-import { Box, VStack, HStack, IconButton, Button } from '@chakra-ui/react'
+import {
+  Box,
+  VStack,
+  HStack,
+  IconButton,
+  Button,
+  Skeleton
+} from '@chakra-ui/react'
 import { subDays, format, addDays, isSameDay, parse } from 'date-fns'
 import { useAtom } from 'jotai'
 import type { FC } from 'react'
@@ -24,13 +31,14 @@ export const GameList: FC<GameListProps> = () => {
       refreshInterval: 1000 * 30
     }
   )
+  const isLoading = !schedule && !scoreboard
 
   const showScoreboard = isSameDay(
     parse(scoreboard?.scoreboard.gameDate || '', 'yyyy-MM-dd', new Date()),
     selectedDate
   )
   const gameDate = schedule?.leagueSchedule.gameDates.find((game) =>
-    game.gameDate.includes(format(selectedDate, 'M/dd/yyyy'))
+    game.gameDate.includes(format(selectedDate, 'M/d/yyyy'))
   )
   const games = showScoreboard ? scoreboard?.scoreboard.games : gameDate?.games
 
@@ -64,6 +72,10 @@ export const GameList: FC<GameListProps> = () => {
           {games?.map((game) => (
             <GameCard key={game.gameId} game={game} />
           ))}
+          {isLoading &&
+            Array.from(Array(5)).map((_, i) => (
+              <Skeleton key={i} w={'full'} h={'251.5px'} rounded={'lg'} />
+            ))}
         </VStack>
       </VStack>
     </Box>
