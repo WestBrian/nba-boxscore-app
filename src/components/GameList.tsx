@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react'
 import { subDays, format, addDays, isSameDay, parse } from 'date-fns'
 import { useAtom } from 'jotai'
-import type { FC } from 'react'
+import { useEffect, FC } from 'react'
 import useSWR from 'swr'
 import { LeagueScheduleResponse } from '../services/schedule.type'
 import { ScoreboardResponse } from '../services/scoreboard.type'
@@ -41,6 +41,10 @@ export const GameList: FC<GameListProps> = () => {
     game.gameDate.includes(format(selectedDate, 'M/d/yyyy'))
   )
   const games = showScoreboard ? scoreboard?.scoreboard.games : gameDate?.games
+
+  useEffect(() => {
+    setSelectedDate(new Date())
+  }, [setSelectedDate])
 
   return (
     <Box p={8} display={'flex'} justifyContent={'center'}>
