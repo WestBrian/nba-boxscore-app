@@ -9,6 +9,9 @@ import {
   Badge,
   SimpleGrid,
   Button,
+  Icon,
+  Flex,
+  Tooltip,
   useColorModeValue,
   useDisclosure
 } from '@chakra-ui/react'
@@ -17,6 +20,8 @@ import type { LiveGame } from '../services/scoreboard.type'
 import { default as NextLink } from 'next/link'
 import { WatchModal } from './watch-modal'
 import { useRouter } from 'next/router'
+import { GlobeAmericasIcon } from '@heroicons/react/20/solid'
+import { useBroadcasters } from '../hooks/useBroadcasters'
 
 const useMetaBg = () => useColorModeValue('gray.200', 'gray.600')
 const useBg = () => useColorModeValue('white', 'gray.700')
@@ -63,6 +68,15 @@ export const GameCard: FC<GameCardProps> = ({ game }) => {
   const router = useRouter()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
+  const broadcasters = useBroadcasters(game.gameId)
+  const natlBroadcasters = broadcasters.filter(
+    (broadcaster) => broadcaster.broadcasterScope === 'natl'
+  )
+  const hasNatlBroadcast = natlBroadcasters.length > 0
+  const hasMainNatlBroadcast = natlBroadcasters.some(
+    (broadcaster) => broadcaster.broadcasterAbbreviation !== 'NBA TV'
+  )
+
   const isLive = game.gameStatus === 2
   const hasBoxscore = game.gameStatus > 1
 
@@ -94,7 +108,19 @@ export const GameCard: FC<GameCardProps> = ({ game }) => {
             {game.gameStatusText}
           </Text>
         </Box>
-        <Box w={'full'} />
+        <Flex w={'full'} align={'center'} justify={'flex-end'}>
+          {hasNatlBroadcast && (
+            <Tooltip
+              label={'This game is being broadcasted nationally'}
+              fontSize={'xs'}
+            >
+              <Icon
+                as={GlobeAmericasIcon}
+                color={hasMainNatlBroadcast ? 'cyan.500' : 'inherit'}
+              />
+            </Tooltip>
+          )}
+        </Flex>
       </SimpleGrid>
       <Box p={4} bg={bg}>
         <VStack spacing={4}>
