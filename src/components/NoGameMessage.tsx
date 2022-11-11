@@ -20,7 +20,13 @@ export const NoGameMessage: FC<NoGameMessageProps> = () => {
     >
       <Box p={8} textAlign={'center'}>
         <VStack spacing={4}>
-          <Image src={Basketball} width={75} height={75} alt={'basketball'} />
+          <Image
+            src={Basketball}
+            width={75}
+            height={75}
+            alt={'basketball'}
+            priority
+          />
           <VStack spacing={1}>
             <Text fontWeight={'semibold'}>No game selected</Text>
             <Text fontSize={'sm'} color={secondaryColor}>

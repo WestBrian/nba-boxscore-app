@@ -21,6 +21,7 @@ export interface GameListProps {}
 
 export const GameList: FC<GameListProps> = () => {
   const [selectedDate, setSelectedDate] = useAtom(selectedDateAtom)
+
   const { data: schedule } = useSWR('schedule', () =>
     customFetch<LeagueScheduleResponse>('/api/schedule')
   )
@@ -31,16 +32,19 @@ export const GameList: FC<GameListProps> = () => {
       refreshInterval: 1000 * 30
     }
   )
-  const isLoading = !schedule && !scoreboard
 
-  const showScoreboard = isSameDay(
-    parse(scoreboard?.scoreboard.gameDate || '', 'yyyy-MM-dd', new Date()),
-    selectedDate
-  )
+  const showScoreboard =
+    scoreboard &&
+    isSameDay(
+      parse(scoreboard.scoreboard.gameDate || '', 'yyyy-MM-dd', new Date()),
+      selectedDate
+    )
   const gameDate = schedule?.leagueSchedule.gameDates.find((game) =>
     game.gameDate.includes(format(selectedDate, 'M/d/yyyy'))
   )
-  const games = showScoreboard ? scoreboard?.scoreboard.games : gameDate?.games
+  const games = showScoreboard ? scoreboard.scoreboard.games : gameDate?.games
+
+  const isLoading = !showScoreboard && !schedule
 
   useEffect(() => {
     setSelectedDate(new Date())
@@ -73,13 +77,11 @@ export const GameList: FC<GameListProps> = () => {
           />
         </HStack>
         <VStack w={'full'} spacing={8}>
-          {games?.map((game) => (
-            <GameCard key={game.gameId} game={game} />
-          ))}
-          {isLoading &&
-            Array.from(Array(5)).map((_, i) => (
-              <Skeleton key={i} w={'full'} h={'251.5px'} rounded={'lg'} />
-            ))}
+          {isLoading
+            ? Array.from(Array(5)).map((_, i) => (
+                <Skeleton key={i} w={'full'} h={'251.5px'} rounded={'lg'} />
+              ))
+            : games?.map((game) => <GameCard key={game.gameId} game={game} />)}
         </VStack>
       </VStack>
     </Box>

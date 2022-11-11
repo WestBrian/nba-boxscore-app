@@ -17,8 +17,7 @@ import TNTLogo from '../../../public/tnt.png'
 import ESPNLogo from '../../../public/espn.png'
 import Image, { StaticImageData } from 'next/image'
 import { ExternalLinkIcon } from '@chakra-ui/icons'
-import type { Game, LeagueScheduleResponse } from '../../services/schedule.type'
-import useSWR from 'swr'
+import { useBroadcasters } from '../../hooks/useBroadcasters'
 
 interface BroadcastMetaInfo {
   image: StaticImageData
@@ -59,21 +58,7 @@ export const WatchModal: FC<WatchModalProps> = ({
   isOpen,
   onClose
 }) => {
-  const { data: schedule } = useSWR<LeagueScheduleResponse>('schedule')
-
-  const findGame = (game: Game) => game.gameId === gameId
-  const gameDate = schedule?.leagueSchedule.gameDates.find((g) =>
-    g.games.find(findGame)
-  )
-  const game = gameDate?.games.find(findGame)
-  const broadcasters = game?.broadcasters
-  const broadcasts = broadcasters
-    ? [
-        ...broadcasters.nationalTvBroadcasters,
-        ...broadcasters.homeTvBroadcasters,
-        ...broadcasters.awayTvBroadcasters
-      ]
-    : []
+  const broadcasts = useBroadcasters(gameId)
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
