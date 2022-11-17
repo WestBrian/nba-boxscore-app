@@ -1,4 +1,4 @@
-import type { FC } from 'react'
+import { FC, useEffect } from 'react'
 import { Box, VStack } from '@chakra-ui/react'
 import useSWR from 'swr'
 import { useRouter } from 'next/router'
@@ -21,6 +21,13 @@ export const GameDetails: FC<GameDetailsProps> = () => {
       refreshInterval: 1000 * 30
     }
   )
+
+  useEffect(() => {
+    if (boxscore) {
+      const { homeTeam, awayTeam } = boxscore.game
+      document.title = `${homeTeam.teamTricode} (${homeTeam.score}) vs ${awayTeam.teamTricode} (${awayTeam.score})`
+    }
+  }, [boxscore])
 
   return (
     <Box h={'full'} p={8}>
