@@ -12,6 +12,7 @@ import {
   Th,
   useColorModeValue
 } from '@chakra-ui/react'
+import { useIsGameLive } from '../hooks/useIsGameLive'
 
 const useBg = () => useColorModeValue('white', 'gray.600')
 const useSecondaryColor = () => useColorModeValue('gray.600', 'gray.400')
@@ -24,13 +25,16 @@ const formatter = new Intl.NumberFormat('en-US', {
 })
 
 export interface BoxscoreTableProps {
+  gameId: string
   team: BoxscoreResponse['game']['homeTeam']
 }
 
-export const BoxscoreTable: FC<BoxscoreTableProps> = ({ team }) => {
+export const BoxscoreTable: FC<BoxscoreTableProps> = ({ gameId, team }) => {
   const bg = useBg()
   const secondaryColor = useSecondaryColor()
   const borderColor = useBorderColor()
+
+  const isLive = useIsGameLive(gameId)
 
   function formatMinutes(minutes: string) {
     const match = minutes.match(/[0-9]+/)
@@ -101,10 +105,12 @@ export const BoxscoreTable: FC<BoxscoreTableProps> = ({ team }) => {
                 borderColor={borderColor}
               >
                 <Td display={{ base: 'none', xl: 'table-cell' }}>
-                  {player.firstName} {player.familyName}
+                  {player.firstName} {player.familyName}{' '}
+                  {isLive && player.oncourt === '1' && '○'}
                 </Td>
                 <Td display={{ base: 'table-cell', xl: 'none' }}>
-                  {player.firstName[0]} {player.familyName}
+                  {player.firstName[0]} {player.familyName}{' '}
+                  {isLive && player.oncourt === '1' && '○'}
                 </Td>
                 <Td isNumeric display={{ base: 'none', xl: 'table-cell' }}>
                   {formatMinutes(player.statistics.minutesCalculated)}

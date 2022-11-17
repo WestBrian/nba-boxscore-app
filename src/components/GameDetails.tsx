@@ -35,8 +35,14 @@ export const GameDetails: FC<GameDetailsProps> = () => {
         boxscore ? (
           <VStack spacing={8} pb={[0, 8]}>
             <ScoreDetails boxscore={boxscore.game} />
-            <BoxscoreTable team={boxscore.game.homeTeam} />
-            <BoxscoreTable team={boxscore.game.awayTeam} />
+            <BoxscoreTable
+              gameId={boxscore.game.gameId}
+              team={boxscore.game.homeTeam}
+            />
+            <BoxscoreTable
+              gameId={boxscore.game.gameId}
+              team={boxscore.game.awayTeam}
+            />
           </VStack>
         ) : null
       ) : (
