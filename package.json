@@ -28,7 +28,7 @@
     "@emotion/styled": "^11.10.5",
     "@heroicons/react": "^2.0.13",
     "date-fns": "^2.29.3",
-    "framer-motion": "^7.6.1",
+    "framer-motion": "^8.5.2",
     "jotai": "^1.9.2",
     "lodash": "^4.17.21",
     "next": "^12.3.1",
