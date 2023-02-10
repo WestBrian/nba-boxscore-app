@@ -40,7 +40,7 @@ export const GameList: FC<GameListProps> = () => {
       selectedDate
     )
   const gameDate = schedule?.leagueSchedule.gameDates.find((game) =>
-    game.gameDate.includes(format(selectedDate, 'M/d/yyyy'))
+    game.gameDate.includes(format(selectedDate, 'MM/dd/yyyy'))
   )
   const games = showScoreboard ? scoreboard.scoreboard.games : gameDate?.games
 
