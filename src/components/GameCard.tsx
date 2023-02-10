@@ -131,11 +131,15 @@ export const GameCard: FC<GameCardProps> = ({ game }) => {
       <Box p={4} bg={metaBg} display={'flex'} justifyContent={'center'}>
         <HStack spacing={4}>
           <Box display={[hasBoxscore ? 'block' : 'none', 'none']}>
-            <NextLink href={`/boxscore/${game.gameId}`} passHref>
-              <Link color={linkColor} fontSize={'sm'} fontWeight={'bold'}>
-                Boxscore
-              </Link>
-            </NextLink>
+            <Link
+              as={NextLink}
+              href={`/boxscore/${game.gameId}`}
+              color={linkColor}
+              fontSize={'sm'}
+              fontWeight={'bold'}
+            >
+              Boxscore
+            </Link>
           </Box>
           <Button
             variant={'link'}

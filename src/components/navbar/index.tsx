@@ -30,22 +30,18 @@ export const Navbar: FC<NavbarProps> = () => {
         height={'100%'}
       >
         <Link href={'/'}>
-          <a>
-            <HStack spacing={2}>
-              <Image
-                src={logo}
-                width={25}
-                height={25}
-                alt={'logo'}
-                style={
-                  colorMode === 'light' ? undefined : { filter: 'invert()' }
-                }
-              />
-              <Text fontWeight={'semibold'} letterSpacing={'wider'}>
-                BOXSCORE
-              </Text>
-            </HStack>
-          </a>
+          <HStack spacing={2}>
+            <Image
+              src={logo}
+              width={25}
+              height={25}
+              alt={'logo'}
+              style={colorMode === 'light' ? undefined : { filter: 'invert()' }}
+            />
+            <Text fontWeight={'semibold'} letterSpacing={'wider'}>
+              BOXSCORE
+            </Text>
+          </HStack>
         </Link>
         <IconButton
           variant={'ghost'}
