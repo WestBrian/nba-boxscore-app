@@ -26,7 +26,7 @@
     "@chakra-ui/react": "^2.3.7",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
-    "@heroicons/react": "^2.0.13",
+    "@heroicons/react": "^2.0.15",
     "date-fns": "^2.29.3",
     "framer-motion": "^9.0.2",
     "jotai": "^1.9.2",
