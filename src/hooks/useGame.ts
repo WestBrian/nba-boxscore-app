@@ -1,9 +1,10 @@
 import useSWR from 'swr'
 import type { Game, LeagueScheduleResponse } from '../services/schedule.type'
 import { useMemo } from 'react'
+import { useSchedule } from './useSchedule'
 
 export function useGame(gameId: string) {
-  const { data: schedule } = useSWR<LeagueScheduleResponse>('schedule')
+  const { data: schedule } = useSchedule()
   const game = useMemo(() => {
     const findGame = (game: Game) => game.gameId === gameId
     const gameDate = schedule?.leagueSchedule.gameDates.find((g) =>

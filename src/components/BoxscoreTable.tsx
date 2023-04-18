@@ -73,7 +73,14 @@ export const BoxscoreTable: FC<BoxscoreTableProps> = ({ gameId, team }) => {
         <Text fontWeight={'semibold'} letterSpacing={'widest'}>
           {team.teamName.toUpperCase()}
         </Text>
-        <Table w={'full'} variant={'simple'} bg={bg} size={'sm'} rounded={'md'}>
+        <Table
+          w={'full'}
+          variant={'simple'}
+          bg={bg}
+          size={'sm'}
+          rounded={'md'}
+          fontFamily={'mono'}
+        >
           <Thead>
             <Tr>
               <Th>Name</Th>
