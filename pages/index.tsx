@@ -1,14 +1,14 @@
 import type { NextPage } from 'next'
-import { Schedule, ScheduleProps } from '../src/pages/Schedule'
 import Head from 'next/head'
+import { TopPerformers, TopPerformersProps } from '../src/pages/TopPerformers'
 
-const HomePage: NextPage<ScheduleProps> = () => {
+const HomePage: NextPage<TopPerformersProps> = () => {
   return (
     <>
       <Head>
         <title>Simple NBA Stats</title>
       </Head>
-      <Schedule />
+      <TopPerformers />
     </>
   )
 }
