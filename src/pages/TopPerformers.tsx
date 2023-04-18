@@ -1,4 +1,4 @@
-import { VStack, Heading, HStack, Container } from '@chakra-ui/react'
+import { VStack, Heading, HStack } from '@chakra-ui/react'
 import { FC } from 'react'
 import { format, isToday } from 'date-fns'
 import { useLeaders } from '../hooks/useLeaders'

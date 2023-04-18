@@ -20,7 +20,7 @@ export const ScheduleBar: FC<ScheduleBarProps> = () => {
   const { data, isLoading } = useScoreboard()
 
   return (
-    <Box bg={'gray.900'} w={'full'}>
+    <Box bg={'gray.900'} w={'full'} h={isLoading ? '157px' : 'auto'}>
       <Container maxW={'container.lg'}>
         <VStack w={'full'} align={'start'} p={4}>
           <Flex

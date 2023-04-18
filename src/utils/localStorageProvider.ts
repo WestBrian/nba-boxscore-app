@@ -1,21 +1,27 @@
-import type { State } from 'swr'
+import { useRef, useEffect } from 'react'
+import { State } from 'swr'
 
-export function localStorageProvider() {
-  if (typeof window === 'undefined') {
-    return new Map<string, State | undefined>()
-  }
+export function useCacheProvider() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const cache = useRef<Map<string, State<any, any>>>(new Map())
 
-  // When initializing, we restore the data from `localStorage` into a map.
-  const map = new Map<string, State | undefined>(
-    JSON.parse(localStorage.getItem('app-cache') || '[]')
-  )
+  useEffect(() => {
+    const appCache = localStorage.getItem('app-cache')
+    if (appCache) {
+      const map = new Map(
+        JSON.parse(appCache) as Iterable<[string, State<any, any>]>
+      )
+      map.forEach((value, key) => cache.current.set(key, value))
+    }
 
-  // Before unloading the app, we write back all the data into `localStorage`.
-  window.addEventListener('beforeunload', () => {
-    const appCache = JSON.stringify(Array.from(map.entries()))
-    localStorage.setItem('app-cache', appCache)
-  })
+    const saveCache = () => {
+      const appCache = JSON.stringify(Array.from(cache.current.entries()))
+      localStorage.setItem('app-cache', appCache)
+    }
 
-  // We still use the map for write & read for performance.
-  return map
+    window.addEventListener('beforeunload', saveCache)
+    return () => window.removeEventListener('beforeunload', saveCache)
+  }, [])
+
+  return () => cache.current
 }

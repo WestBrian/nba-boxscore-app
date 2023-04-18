@@ -41,7 +41,9 @@ export const PerformerCard: FC<PerformerCardProps> = ({ player, category }) => {
         <Image
           src={`https://cdn.nba.com/headshots/nba/latest/1040x760/${player.personId}.png`}
           alt={player.familyName}
+          sizes={'216px'}
           fill
+          priority
         />
       </AspectRatio>
       <Box bg={'gray.900'} px={4} py={2} roundedBottom={'lg'}>
