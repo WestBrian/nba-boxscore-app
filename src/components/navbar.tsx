@@ -29,10 +29,10 @@ export const Navbar: FC<NavbarProps> = async () => {
           SlamStats
         </Link>
         <div className="flex flex-row gap-4">
-          <Link href="/schedule">Schedule</Link>
-          <Link href="/teams">Teams</Link>
+          <Link href="/">Schedule</Link>
+          {/* <Link href="/teams">Teams</Link>
           <Link href="/standings">Standings</Link>
-          <Link href="/players">Players</Link>
+          <Link href="/players">Players</Link> */}
         </div>
       </nav>
       <HydrationBoundary state={dehydrate(queryClient)}>

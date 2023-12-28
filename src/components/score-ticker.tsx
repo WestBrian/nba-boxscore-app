@@ -38,6 +38,7 @@ const EventCard: FC<EventCardProps> = ({ event }) => {
       awayScore={awayTeam.score}
       dateTime={new Date(event.date)}
       isLive={event.status.type.state === 'in'}
+      isComplete={event.status.type.state === 'post'}
       gameTime={event.status.displayClock}
       gamePeriod={event.status.period}
     />
@@ -57,9 +58,22 @@ export const ScoreTicker: FC<ScoreTickerProps> = ({}) => {
     return null
   }
 
+  function sortEvents(
+    a: Scoreboard['events'][number],
+    b: Scoreboard['events'][number],
+  ) {
+    if (a.status.type.state === 'in' && b.status.type.state !== 'in') {
+      return -1
+    } else if (a.status.type.state !== 'in' && b.status.type.state === 'in') {
+      return 1
+    } else {
+      return 0
+    }
+  }
+
   return (
     <div className="w-full bg-slate-700 rounded-t-sm rounded-b-lg flex flex-row gap-4 items-center px-8 py-1">
-      {schedule.events.map((event) => (
+      {schedule.events.sort(sortEvents).map((event) => (
         <Fragment key={event.uid}>
           <EventCard event={event} />
           <div className="bg-slate-800 w-[2px] self-stretch" />

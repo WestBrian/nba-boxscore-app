@@ -34,6 +34,7 @@ export interface SimpleGameCardProps {
   awayScore: string
   dateTime: Date
   isLive: boolean
+  isComplete: boolean
   gameTime: string
   gamePeriod: number
 }
@@ -46,6 +47,7 @@ export const SimpleGameCard: FC<SimpleGameCardProps> = ({
   awayTeam,
   awayScore,
   isLive,
+  isComplete,
   dateTime,
 }) => {
   function gamePeriodToString(period: number) {
@@ -69,7 +71,9 @@ export const SimpleGameCard: FC<SimpleGameCardProps> = ({
         <span>
           {isLive
             ? `${gameTime} ${gamePeriodToString(gamePeriod)}`
-            : format(dateTime, 'h:mm a')}
+            : isComplete
+              ? 'Final'
+              : format(dateTime, 'h:mm a')}
         </span>
         {isLive ? (
           <motion.div
