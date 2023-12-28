@@ -15,11 +15,11 @@ export const Default: Story = {
   args: {
     homeTeam: 'PHI',
     awayTeam: 'CEL',
-    homeScore: 102,
-    awayScore: 97,
+    homeScore: '102',
+    awayScore: '97',
     isLive: false,
     dateTime: new Date(),
     gameTime: '4:02',
-    gamePeriod: '4th',
+    gamePeriod: 4,
   },
 }
