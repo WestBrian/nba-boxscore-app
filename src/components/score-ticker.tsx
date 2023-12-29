@@ -1,11 +1,15 @@
 'use client'
 
-import { type FC, Fragment } from 'react'
+import type { FC } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
 import { getSchedule } from '@/src/lib/espn'
 import { SimpleGameCard } from '@/src/components/simple-game-card'
 import type { Scoreboard } from '@/src/types/scoreboard'
+import { ScrollMenu } from 'react-horizontal-scrolling-menu'
+import { getShownDate } from '@/src/lib/getShownDate'
+
+import 'react-horizontal-scrolling-menu/dist/styles.css'
 
 interface EventCardProps {
   event: Scoreboard['events'][number]
@@ -45,14 +49,10 @@ const EventCard: FC<EventCardProps> = ({ event }) => {
   )
 }
 
-export interface ScoreTickerProps {
-  date: Date
-}
+export interface ScoreTickerProps {}
 
-export const ScoreTicker: FC<ScoreTickerProps> = ({ date }) => {
-  console.log('date from server')
-  console.log(date)
-
+export const ScoreTicker: FC<ScoreTickerProps> = () => {
+  const date = getShownDate()
   const { data: schedule } = useQuery({
     queryKey: ['schedule', format(date, 'yyyy-MM-dd')],
     queryFn: () => getSchedule(date),
@@ -77,13 +77,13 @@ export const ScoreTicker: FC<ScoreTickerProps> = ({ date }) => {
   }
 
   return (
-    <div className="w-full bg-slate-700 rounded-t-sm rounded-b-lg flex flex-row gap-4 items-center px-8 py-1">
+    <ScrollMenu
+      scrollContainerClassName="bg-slate-700 rounded-t-sm rounded-b-lg px-8 py-1 gap-4"
+      separatorClassName="w-[2px] min-w-[2px] bg-slate-800"
+    >
       {schedule.events.sort(sortEvents).map((event) => (
-        <Fragment key={event.uid}>
-          <EventCard event={event} />
-          <div className="bg-slate-800 w-[2px] self-stretch" />
-        </Fragment>
+        <EventCard key={event.uid} event={event} />
       ))}
-    </div>
+    </ScrollMenu>
   )
 }
