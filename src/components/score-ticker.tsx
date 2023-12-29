@@ -1,6 +1,6 @@
 'use client'
 
-import type { FC } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
 import { getSchedule } from '@/src/lib/espn'
@@ -16,7 +16,12 @@ interface EventCardProps {
 }
 
 const EventCard: FC<EventCardProps> = ({ event }) => {
+  const [eventDate, setEventDate] = useState(event.date)
   const competition = event.competitions.at(0)
+
+  useEffect(() => {
+    setEventDate(event.date)
+  }, [event.date])
 
   if (!competition) {
     return null
@@ -40,7 +45,7 @@ const EventCard: FC<EventCardProps> = ({ event }) => {
       homeScore={homeTeam.score}
       awayTeam={awayTeam.team.abbreviation}
       awayScore={awayTeam.score}
-      dateTime={new Date(event.date)}
+      dateTime={new Date(eventDate)}
       isLive={event.status.type.state === 'in'}
       isComplete={event.status.type.state === 'post'}
       gameTime={event.status.displayClock}
