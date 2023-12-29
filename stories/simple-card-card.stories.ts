@@ -19,7 +19,7 @@ export const Default: Story = {
     awayScore: '97',
     isLive: false,
     isComplete: false,
-    dateTime: new Date(),
+    dateTime: '7:00 PM',
     gameTime: '4:02',
     gamePeriod: 4,
   },
