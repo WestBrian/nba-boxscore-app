@@ -60,15 +60,17 @@ export const SimpleGameCard: FC<SimpleGameCardProps> = ({
         return '3rd'
       case 4:
         return '4th'
+      case 5:
+        return 'OT'
       default:
         return ''
     }
   }
 
   return (
-    <div className="bg-slate-700 rounded-sm text-sm text-white min-w-[100px] flex flex-col gap-1 p-1 hover:bg-slate-800 cursor-pointer">
+    <div className="bg-slate-700 rounded-sm text-sm text-white w-[100px] flex flex-col gap-1 p-1 hover:bg-slate-800 cursor-pointer">
       <div className="flex flex-row justify-between items-center">
-        <span>
+        <span suppressHydrationWarning>
           {isLive
             ? `${gameTime} ${gamePeriodToString(gamePeriod)}`
             : isComplete

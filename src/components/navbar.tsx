@@ -8,15 +8,18 @@ import {
 } from '@tanstack/react-query'
 import { format } from 'date-fns'
 import { ScoreTicker } from '@/src/components/score-ticker'
+import { getShownDate } from '@/src/lib/getShownDate'
 
 export interface NavbarProps {}
 
 export const Navbar: FC<NavbarProps> = async () => {
   const queryClient = new QueryClient()
 
+  const date = getShownDate()
+
   await queryClient.prefetchQuery({
-    queryKey: ['schedule', format(new Date(), 'yyyy-MM-dd')],
-    queryFn: () => getSchedule(new Date()),
+    queryKey: ['schedule', format(date, 'yyyy-MM-dd')],
+    queryFn: () => getSchedule(date),
   })
 
   return (
