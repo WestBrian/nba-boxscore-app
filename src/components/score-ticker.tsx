@@ -16,11 +16,11 @@ interface EventCardProps {
 }
 
 const EventCard: FC<EventCardProps> = ({ event }) => {
-  const [eventDate, setEventDate] = useState(event.date)
+  const [eventTime, setEventTime] = useState(format(event.date, 'h:mm a'))
   const competition = event.competitions.at(0)
 
   useEffect(() => {
-    setEventDate(event.date)
+    setEventTime(format(event.date, 'h:mm a'))
   }, [event.date])
 
   if (!competition) {
@@ -45,7 +45,7 @@ const EventCard: FC<EventCardProps> = ({ event }) => {
       homeScore={homeTeam.score}
       awayTeam={awayTeam.team.abbreviation}
       awayScore={awayTeam.score}
-      dateTime={new Date(eventDate)}
+      dateTime={eventTime}
       isLive={event.status.type.state === 'in'}
       isComplete={event.status.type.state === 'post'}
       gameTime={event.status.displayClock}

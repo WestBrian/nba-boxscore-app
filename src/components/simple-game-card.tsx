@@ -2,7 +2,6 @@
 
 import type { FC } from 'react'
 import { nbaTeams } from '@/src/lib/nba-data'
-import { format } from 'date-fns'
 import { motion } from 'framer-motion'
 
 interface TeamRowProps {
@@ -32,7 +31,7 @@ export interface SimpleGameCardProps {
   awayTeam: string
   homeScore: string
   awayScore: string
-  dateTime: Date
+  dateTime: string
   isLive: boolean
   isComplete: boolean
   gameTime: string
@@ -75,7 +74,7 @@ export const SimpleGameCard: FC<SimpleGameCardProps> = ({
             ? `${gameTime} ${gamePeriodToString(gamePeriod)}`
             : isComplete
               ? 'Final'
-              : format(dateTime, 'h:mm a')}
+              : dateTime}
         </span>
         {isLive ? (
           <motion.div
