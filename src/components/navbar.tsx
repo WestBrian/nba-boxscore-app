@@ -6,7 +6,7 @@ import {
   HydrationBoundary,
   dehydrate,
 } from '@tanstack/react-query'
-import { format } from 'date-fns'
+import { format, isBefore, subDays } from 'date-fns'
 import { ScoreTicker } from '@/src/components/score-ticker'
 
 export interface NavbarProps {}
@@ -14,9 +14,19 @@ export interface NavbarProps {}
 export const Navbar: FC<NavbarProps> = async () => {
   const queryClient = new QueryClient()
 
+  let date = new Date()
+  const getYesterday = isBefore(
+    date,
+    new Date(date.getFullYear(), date.getMonth(), date.getDate(), 11),
+  )
+
+  if (getYesterday) {
+    date = subDays(date, 1)
+  }
+
   await queryClient.prefetchQuery({
-    queryKey: ['schedule', format(new Date(), 'yyyy-MM-dd')],
-    queryFn: () => getSchedule(new Date()),
+    queryKey: ['schedule', format(date, 'yyyy-MM-dd')],
+    queryFn: () => getSchedule(date),
   })
 
   return (
