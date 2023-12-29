@@ -60,6 +60,8 @@ export const SimpleGameCard: FC<SimpleGameCardProps> = ({
         return '3rd'
       case 4:
         return '4th'
+      case 5:
+        return 'OT'
       default:
         return ''
     }

@@ -45,12 +45,14 @@ const EventCard: FC<EventCardProps> = ({ event }) => {
   )
 }
 
-export interface ScoreTickerProps {}
+export interface ScoreTickerProps {
+  date: Date
+}
 
-export const ScoreTicker: FC<ScoreTickerProps> = ({}) => {
+export const ScoreTicker: FC<ScoreTickerProps> = ({ date }) => {
   const { data: schedule } = useQuery({
-    queryKey: ['schedule', format(new Date(), 'yyyy-MM-dd')],
-    queryFn: () => getSchedule(new Date()),
+    queryKey: ['schedule', format(date, 'yyyy-MM-dd')],
+    queryFn: () => getSchedule(date),
     refetchInterval: 30 * 1000,
   })
 

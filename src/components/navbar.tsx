@@ -46,7 +46,7 @@ export const Navbar: FC<NavbarProps> = async () => {
         </div>
       </nav>
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <ScoreTicker />
+        <ScoreTicker date={date} />
       </HydrationBoundary>
     </div>
   )
