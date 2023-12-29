@@ -20,6 +20,7 @@ const EventCard: FC<EventCardProps> = ({ event }) => {
   const competition = event.competitions.at(0)
 
   useEffect(() => {
+    console.log('running')
     setEventTime(format(event.date, 'h:mm a'))
   }, [event.date])
 
