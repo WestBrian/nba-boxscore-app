@@ -50,6 +50,9 @@ export interface ScoreTickerProps {
 }
 
 export const ScoreTicker: FC<ScoreTickerProps> = ({ date }) => {
+  console.log('date from server')
+  console.log(date)
+
   const { data: schedule } = useQuery({
     queryKey: ['schedule', format(date, 'yyyy-MM-dd')],
     queryFn: () => getSchedule(date),
