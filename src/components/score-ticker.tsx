@@ -21,6 +21,7 @@ const EventCard: FC<EventCardProps> = ({ event }) => {
 
   useEffect(() => {
     setEventTime(format(event.date, 'h:mm a'))
+    console.log(format(event.date, 'h:mm a'))
   }, [event.date])
 
   if (!competition) {
@@ -38,6 +39,8 @@ const EventCard: FC<EventCardProps> = ({ event }) => {
   ) {
     return null
   }
+
+  console.log('render')
 
   return (
     <SimpleGameCard
