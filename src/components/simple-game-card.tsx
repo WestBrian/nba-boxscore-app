@@ -3,6 +3,7 @@
 import type { FC } from 'react'
 import { nbaTeams } from '@/src/lib/nba-data'
 import { motion } from 'framer-motion'
+import { format } from 'date-fns'
 
 interface TeamRowProps {
   teamName: string
@@ -31,7 +32,7 @@ export interface SimpleGameCardProps {
   awayTeam: string
   homeScore: string
   awayScore: string
-  dateTime: string
+  dateTime: Date
   isLive: boolean
   isComplete: boolean
   gameTime: string
@@ -66,6 +67,8 @@ export const SimpleGameCard: FC<SimpleGameCardProps> = ({
     }
   }
 
+  console.log(format(dateTime, 'h:mm a'))
+
   return (
     <div className="bg-slate-700 rounded-sm text-sm text-white w-[100px] flex flex-col gap-1 p-1 hover:bg-slate-800 cursor-pointer">
       <div className="flex flex-row justify-between items-center">
@@ -74,7 +77,7 @@ export const SimpleGameCard: FC<SimpleGameCardProps> = ({
             ? `${gameTime} ${gamePeriodToString(gamePeriod)}`
             : isComplete
               ? 'Final'
-              : dateTime}
+              : format(dateTime, 'h:mm a')}
         </span>
         {isLive ? (
           <motion.div
