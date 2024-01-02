@@ -20,7 +20,6 @@ const EventCard: FC<EventCardProps> = ({ event }) => {
   const competition = event.competitions.at(0)
 
   useEffect(() => {
-    console.log(format(event.date, 'h:mm a'))
     setEventTime(format(event.date, 'h:mm a'))
   }, [event.date])
 
@@ -42,6 +41,7 @@ const EventCard: FC<EventCardProps> = ({ event }) => {
 
   return (
     <SimpleGameCard
+      key={`${event.uid}-${eventTime}`}
       homeTeam={homeTeam.team.abbreviation}
       homeScore={homeTeam.score}
       awayTeam={awayTeam.team.abbreviation}
