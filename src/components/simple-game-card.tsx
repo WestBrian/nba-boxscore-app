@@ -1,6 +1,6 @@
 'use client'
 
-import type { FC } from 'react'
+import { useState, type FC, useEffect } from 'react'
 import { nbaTeams } from '@/src/lib/nba-data'
 import { motion } from 'framer-motion'
 import { format } from 'date-fns'
@@ -50,6 +50,8 @@ export const SimpleGameCard: FC<SimpleGameCardProps> = ({
   isComplete,
   dateTime,
 }) => {
+  const [formattedTime, setFormattedTime] = useState('')
+
   function gamePeriodToString(period: number) {
     switch (period) {
       case 1:
@@ -67,17 +69,19 @@ export const SimpleGameCard: FC<SimpleGameCardProps> = ({
     }
   }
 
+  useEffect(() => {
+    setFormattedTime(format(dateTime, 'h:mm a'))
+  }, [dateTime])
+
   return (
     <div className="bg-slate-700 rounded-sm text-sm text-white w-[100px] flex flex-col gap-1 p-1 hover:bg-slate-800 cursor-pointer">
       <div className="flex flex-row justify-between items-center">
-        <span>
-          {isLive ? (
-            `${gameTime} ${gamePeriodToString(gamePeriod)}`
-          ) : isComplete ? (
-            'Final'
-          ) : (
-            <span suppressHydrationWarning>{format(dateTime, 'h:mm a')}</span>
-          )}
+        <span className="min-h-[20px] min-w-[1px]">
+          {isLive
+            ? `${gameTime} ${gamePeriodToString(gamePeriod)}`
+            : isComplete
+              ? 'Final'
+              : formattedTime}
         </span>
         {isLive ? (
           <motion.div
