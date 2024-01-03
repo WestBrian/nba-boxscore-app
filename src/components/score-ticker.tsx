@@ -1,6 +1,6 @@
 'use client'
 
-import { FC } from 'react'
+import type { FC } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
 import { getSchedule } from '@/src/lib/espn'
