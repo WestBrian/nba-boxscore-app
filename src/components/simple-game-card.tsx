@@ -14,7 +14,7 @@ const TeamRow: FC<TeamRowProps> = ({ teamName, teamScore }) => {
   const team = nbaTeams.find((team) => team.abbreviation === teamName)
 
   return (
-    <div className="flex flex-row justify-between items-center font-semibold">
+    <div className="flex flex-row justify-between items-center font-semibold font-mono tracking-wide">
       <div className="flex flex-row gap-2">
         <div
           className="w-[4px] rounded-full"
@@ -22,7 +22,7 @@ const TeamRow: FC<TeamRowProps> = ({ teamName, teamScore }) => {
         />
         <span>{teamName}</span>
       </div>
-      <span>{teamScore}</span>
+      <span className="text-right">{teamScore}</span>
     </div>
   )
 }
