@@ -67,7 +67,7 @@ export const nbaTeams = [
   {
     team_name: 'Los Angeles Lakers',
     abbreviation: 'LAL',
-    colors: ['#552583', '#FDB927'],
+    colors: ['#FDB927', '#552583'],
   },
   {
     team_name: 'Memphis Grizzlies',
@@ -91,12 +91,12 @@ export const nbaTeams = [
   },
   {
     team_name: 'New Orleans Pelicans',
-    abbreviation: 'NOP',
+    abbreviation: 'NO',
     colors: ['#0C2340', '#C8102E', '#85714D'],
   },
   {
     team_name: 'New York Knicks',
-    abbreviation: 'NYK',
+    abbreviation: 'NY',
     colors: ['#F58426', '#006BB6'],
   },
   {
@@ -141,12 +141,12 @@ export const nbaTeams = [
   },
   {
     team_name: 'Utah Jazz',
-    abbreviation: 'UTA',
+    abbreviation: 'UTAH',
     colors: ['#002B5C', '#00471B', '#F9A01B'],
   },
   {
     team_name: 'Washington Wizards',
-    abbreviation: 'WAS',
+    abbreviation: 'WSH',
     colors: ['#002B5C', '#E31837', '#C4CED4'],
   },
 ]
