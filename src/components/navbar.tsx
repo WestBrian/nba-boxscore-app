@@ -1,29 +1,12 @@
 import Link from 'next/link'
 import { type FC } from 'react'
-import { getSchedule } from '@/src/lib/espn'
-import {
-  QueryClient,
-  HydrationBoundary,
-  dehydrate,
-} from '@tanstack/react-query'
-import { format } from 'date-fns'
 import { ScoreTicker } from '@/src/components/score-ticker'
-import { getShownDate } from '@/src/lib/getShownDate'
 
 export interface NavbarProps {}
 
 export const Navbar: FC<NavbarProps> = async () => {
-  const queryClient = new QueryClient()
-
-  const date = getShownDate()
-
-  await queryClient.prefetchQuery({
-    queryKey: ['schedule', format(date, 'yyyy-MM-dd')],
-    queryFn: () => getSchedule(date),
-  })
-
   return (
-    <div className="p-4">
+    <div>
       <nav className="h-[75px] w-full bg-slate-800 mb-2 rounded-t-lg rounded-b-sm flex flex-row items-center justify-between px-8">
         <Link
           href="/"
@@ -38,9 +21,7 @@ export const Navbar: FC<NavbarProps> = async () => {
           <Link href="/players">Players</Link> */}
         </div>
       </nav>
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        <ScoreTicker />
-      </HydrationBoundary>
+      <ScoreTicker />
     </div>
   )
 }

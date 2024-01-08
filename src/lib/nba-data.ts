@@ -46,7 +46,7 @@ export const nbaTeams = [
   },
   {
     team_name: 'Golden State Warriors',
-    abbreviation: 'GSW',
+    abbreviation: 'GS',
     colors: ['#1D428A', '#FFC72C'],
   },
   {
@@ -131,7 +131,7 @@ export const nbaTeams = [
   },
   {
     team_name: 'San Antonio Spurs',
-    abbreviation: 'SAS',
+    abbreviation: 'SA',
     colors: ['#C4CED4', '#000000'],
   },
   {

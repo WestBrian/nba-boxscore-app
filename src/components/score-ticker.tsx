@@ -78,7 +78,7 @@ export const ScoreTicker: FC<ScoreTickerProps> = () => {
 
   return (
     <ScrollMenu
-      scrollContainerClassName="bg-slate-700 rounded-t-sm rounded-b-lg px-8 py-1 gap-4"
+      scrollContainerClassName="bg-slate-700 rounded-t-sm rounded-b-lg px-8 py-1 gap-4 min-h-[76px]"
       separatorClassName="w-[2px] min-w-[2px] bg-slate-800"
     >
       {schedule.events.sort(sortEvents).map((event) => (

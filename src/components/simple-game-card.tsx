@@ -4,6 +4,7 @@ import { useState, type FC, useEffect } from 'react'
 import { nbaTeams } from '@/src/lib/nba-data'
 import { motion } from 'framer-motion'
 import { format } from 'date-fns'
+import { gamePeriodToString } from '@/src/lib/gamePeriodToString'
 
 interface TeamRowProps {
   teamName: string
@@ -51,23 +52,6 @@ export const SimpleGameCard: FC<SimpleGameCardProps> = ({
   dateTime,
 }) => {
   const [formattedTime, setFormattedTime] = useState('')
-
-  function gamePeriodToString(period: number) {
-    switch (period) {
-      case 1:
-        return '1st'
-      case 2:
-        return '2nd'
-      case 3:
-        return '3rd'
-      case 4:
-        return '4th'
-      case 5:
-        return 'OT'
-      default:
-        return ''
-    }
-  }
 
   useEffect(() => {
     setFormattedTime(format(dateTime, 'h:mm a'))
