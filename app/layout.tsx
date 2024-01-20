@@ -3,7 +3,6 @@ import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 import { Navbar } from '@/src/components/navbar'
 import { Providers } from '@/src/components/providers'
-import './globals.css'
 import { getSchedule } from '@/src/lib/espn'
 import { getShownDate } from '@/src/lib/getShownDate'
 import {
@@ -12,6 +11,8 @@ import {
   dehydrate,
 } from '@tanstack/react-query'
 import { format } from 'date-fns'
+
+import './globals.css'
 
 export const metadata: Metadata = {
   title: 'SlamStats',

@@ -2,7 +2,7 @@ export interface Scoreboard {
   leagues: LeaguesItem[]
   events: EventsItem[]
 }
-interface LeaguesItem {
+export interface LeaguesItem {
   id: string
   uid: string
   name: string
@@ -16,7 +16,7 @@ interface LeaguesItem {
   calendarEndDate: string
   calendar: string[]
 }
-interface Season {
+export interface Season {
   year: number
   startDate?: string
   endDate?: string
@@ -24,7 +24,7 @@ interface Season {
   type: Type | number
   slug?: string
 }
-interface Type {
+export interface Type {
   id: string
   type?: number
   name?: string
@@ -36,7 +36,7 @@ interface Type {
   shortDetail?: string
   shortName?: string
 }
-interface LogosItem {
+export interface LogosItem {
   href: string
   width: number
   height: number
@@ -44,7 +44,7 @@ interface LogosItem {
   rel: string[]
   lastUpdated: string
 }
-interface EventsItem {
+export interface EventsItem {
   id: string
   uid: string
   date: string
@@ -55,7 +55,7 @@ interface EventsItem {
   links: LinksItem[]
   status: Status
 }
-interface CompetitionsItem {
+export interface CompetitionsItem {
   id: string
   uid: string
   date: string
@@ -77,18 +77,18 @@ interface CompetitionsItem {
   geoBroadcasts: GeoBroadcastsItem[]
   odds: OddsItem[]
 }
-interface Venue {
+export interface Venue {
   id: string
   fullName?: string
   address?: Address
   capacity?: number
   indoor?: boolean
 }
-interface Address {
+export interface Address {
   city: string
   state: string
 }
-interface CompetitorsItem {
+export interface CompetitorsItem {
   id: string
   uid: string
   type: string
@@ -100,7 +100,7 @@ interface CompetitorsItem {
   records: RecordsItem[]
   leaders: LeadersItem[]
 }
-interface Team {
+export interface Team {
   id: string
   uid?: string
   location?: string
@@ -115,7 +115,7 @@ interface Team {
   links?: LinksItem[]
   logo?: string
 }
-interface LinksItem {
+export interface LinksItem {
   rel?: string[]
   href: string
   text?: string
@@ -124,19 +124,19 @@ interface LinksItem {
   language?: string
   shortText?: string
 }
-interface StatisticsItem {
+export interface StatisticsItem {
   name: string
   abbreviation: string
   displayValue: string
   rankDisplayValue?: string
 }
-interface RecordsItem {
+export interface RecordsItem {
   name: string
   abbreviation?: string
   type: string
   summary: string
 }
-interface LeadersItem {
+export interface LeadersItem {
   name?: string
   displayName?: string
   shortDisplayName?: string
@@ -147,7 +147,7 @@ interface LeadersItem {
   athlete?: Athlete
   team?: Team
 }
-interface Athlete {
+export interface Athlete {
   id: string
   fullName: string
   displayName: string
@@ -159,27 +159,27 @@ interface Athlete {
   team: Team
   active: boolean
 }
-interface Position {
+export interface Position {
   abbreviation: string
 }
-interface Status {
+export interface Status {
   clock: number
   displayClock: string
   period: number
   type: Type
 }
-interface Format {
+export interface Format {
   regulation: Regulation
 }
-interface Regulation {
+export interface Regulation {
   periods: number
 }
-interface TicketsItem {
+export interface TicketsItem {
   summary: string
   numberAvailable: number
   links: LinksItem[]
 }
-interface OddsItem {
+export interface OddsItem {
   provider: Provider
   details: string
   overUnder?: number
@@ -187,49 +187,49 @@ interface OddsItem {
   open?: Open
   current?: Current
 }
-interface Provider {
+export interface Provider {
   id: string
   name: string
   priority: number
 }
-interface Open {
+export interface Open {
   over: Over
   under: Under
   total: Total
 }
-interface Over {
+export interface Over {
   value: number
   displayValue: string
   alternateDisplayValue: string
 }
-interface Under {
+export interface Under {
   value: number
   displayValue: string
   alternateDisplayValue: string
 }
-interface Total {
+export interface Total {
   alternateDisplayValue: string
 }
-interface Current {
+export interface Current {
   over: Over
   under: Under
   total: Total
 }
-interface BroadcastsItem {
+export interface BroadcastsItem {
   market: string
   names: string[]
 }
-interface GeoBroadcastsItem {
+export interface GeoBroadcastsItem {
   type: Type
   market: Market
   media: Media
   lang: string
   region: string
 }
-interface Market {
+export interface Market {
   id: string
   type: string
 }
-interface Media {
+export interface Media {
   shortName: string
 }

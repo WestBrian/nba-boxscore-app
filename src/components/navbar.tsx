@@ -7,10 +7,10 @@ export interface NavbarProps {}
 export const Navbar: FC<NavbarProps> = async () => {
   return (
     <div>
-      <nav className="h-[75px] w-full bg-slate-800 mb-2 rounded-t-lg rounded-b-sm flex flex-row items-center justify-between px-8">
+      <nav className="mb-2 flex h-[75px] w-full flex-row items-center justify-between rounded-b-sm rounded-t-lg bg-slate-800 px-8">
         <Link
           href="/"
-          className="text-purple-500 font-semibold text-2xl tracking-wider"
+          className="text-2xl font-semibold tracking-wider text-purple-500"
         >
           SlamStats
         </Link>

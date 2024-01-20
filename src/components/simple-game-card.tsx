@@ -15,7 +15,7 @@ const TeamRow: FC<TeamRowProps> = ({ teamName, teamScore }) => {
   const team = nbaTeams.find((team) => team.abbreviation === teamName)
 
   return (
-    <div className="flex flex-row justify-between items-center font-semibold font-mono tracking-wide">
+    <div className="flex flex-row items-center justify-between font-mono font-semibold tracking-wide">
       <div className="flex flex-row gap-2">
         <div
           className="w-[4px] rounded-full"
@@ -58,8 +58,8 @@ export const SimpleGameCard: FC<SimpleGameCardProps> = ({
   }, [dateTime])
 
   return (
-    <div className="bg-slate-700 rounded-sm text-xs text-white w-[100px] flex flex-col gap-1 p-1 hover:bg-slate-800 cursor-pointer">
-      <div className="flex flex-row justify-between items-center">
+    <div className="flex w-[100px] cursor-pointer flex-col gap-1 rounded-sm bg-slate-700 p-1 text-xs text-white hover:bg-slate-800">
+      <div className="flex flex-row items-center justify-between">
         <span className="min-h-[20px] min-w-[1px]">
           {isLive
             ? `${gameTime} ${gamePeriodToString(gamePeriod)}`
@@ -69,7 +69,7 @@ export const SimpleGameCard: FC<SimpleGameCardProps> = ({
         </span>
         {isLive ? (
           <motion.div
-            className="w-2 h-2 rounded-full"
+            className="h-2 w-2 rounded-full"
             initial={{ backgroundColor: '#EF4444' }}
             animate={{ backgroundColor: '#B91C1C' }}
             transition={{

@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect, useState, type FC } from 'react'
 import { gamePeriodToString } from '@/src/lib/gamePeriodToString'
 import { format } from 'date-fns'
@@ -41,7 +43,7 @@ export const ComplexGameCard: FC<ComplexGameCardProps> = ({
   }, [dateTime])
 
   return (
-    <div className="bg-slate-700 p-4 rounded-sm flex flex-col gap-4">
+    <div className="flex flex-col gap-4 rounded-sm bg-slate-700 p-4 hover:outline hover:outline-4 hover:outline-slate-900">
       <span className="min-h-[24px] min-w-[1px] text-sm">
         {isLive
           ? `${gameTime} ${gamePeriodToString(gamePeriod)}`
@@ -49,8 +51,8 @@ export const ComplexGameCard: FC<ComplexGameCardProps> = ({
             ? 'Final'
             : formattedTime}
       </span>
-      <div className="flex flex-row justify-between items-center">
-        <div className="flex flex-row items-center gap-4">
+      <div className="flex flex-col items-start gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex flex-row items-center justify-between gap-4 self-stretch">
           <div className="flex flex-row items-center gap-2">
             <Image
               src={homeTeamImage}
@@ -58,17 +60,17 @@ export const ComplexGameCard: FC<ComplexGameCardProps> = ({
               height={50}
               alt={homeTeamName}
             />
-            <div className="flex flex-col min-w-[104px]">
+            <div className="flex flex-col lg:min-w-[104px]">
               <span>{homeTeamName}</span>
               <span className="text-xs text-slate-400">({homeTeamRecord})</span>
             </div>
           </div>
-          <span className="text-2xl font-mono">{homeTeamScore}</span>
+          <span className="font-mono text-2xl">{homeTeamScore}</span>
         </div>
-        <div className="flex flex-row items-center gap-4 text-right">
-          <span className="text-2xl font-mono">{awayTeamScore}</span>
-          <div className="flex flex-row items-center gap-2">
-            <div className="flex flex-col min-w-[104px]">
+        <div className="flex flex-row-reverse items-center justify-between gap-4 self-stretch lg:flex-row lg:text-right">
+          <span className="font-mono text-2xl">{awayTeamScore}</span>
+          <div className="flex flex-row-reverse items-center gap-2 lg:flex-row">
+            <div className="flex flex-col lg:min-w-[104px]">
               <span>{awayTeamName}</span>
               <span className="text-xs text-slate-400">({awayTeamRecord})</span>
             </div>
