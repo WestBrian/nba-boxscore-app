@@ -3,6 +3,15 @@ import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 import { Navbar } from '@/src/components/navbar'
 import { Providers } from '@/src/components/providers'
+import { getSchedule } from '@/src/lib/espn'
+import { getShownDate } from '@/src/lib/getShownDate'
+import {
+  HydrationBoundary,
+  QueryClient,
+  dehydrate,
+} from '@tanstack/react-query'
+import { format } from 'date-fns'
+
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -10,20 +19,33 @@ export const metadata: Metadata = {
   description: 'SlamStats is a tool for seeing NBA statistics',
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const queryClient = new QueryClient()
+
+  const date = getShownDate()
+
+  await queryClient.prefetchQuery({
+    queryKey: ['schedule', format(date, 'yyyy-MM-dd')],
+    queryFn: () => getSchedule(date),
+  })
+
   return (
     <html
       lang="en"
       className={`dark ${GeistSans.variable} ${GeistMono.variable}`}
     >
-      <body>
+      <body className="p-8">
         <Providers>
-          <Navbar />
-          <main>{children}</main>
+          <HydrationBoundary state={dehydrate(queryClient)}>
+            <div className="flex flex-col gap-16">
+              <Navbar />
+              <main>{children}</main>
+            </div>
+          </HydrationBoundary>
         </Providers>
       </body>
     </html>
