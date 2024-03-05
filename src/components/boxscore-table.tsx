@@ -78,6 +78,7 @@ export const BoxscoreTable: FC<BoxscoreTableProps> = ({ gameId }) => {
     queryKey: ['summary', gameId],
     queryFn: () => getSummary(gameId),
     refetchInterval: 1000 * 30,
+    staleTime: 0,
   })
 
   if (!summary) {
